@@ -67,23 +67,11 @@ class savefile():
         np.save(labels_filename, self.world_pbb)
 
 
-    def open(self, file):
-        #TODO: file type ch
-        fileName = []
-        fileName.append(file)
-        # print("open ",fileName)
-        if (fileName[0] == ''):
-            return 0
+    def openfile(self, filename):
+        #TODO: file type
 
-        self.pt_num = fileName[0].split('/')[-1].split('.mhd')[0]
-
-
-        sliceim, origin, spacing, isflip = UI_util.load_itk_image(fileName[0])
-        # print("sliceim.shape", sliceim.shape)
-        # print("origin.shape", origin.shape)
-        # print("spacing.shape", spacing.shape)
-        # print(spacing)
-
+        self.pt_num = fileName.split('/')[-1].split('.mhd')[0]
+        sliceim, origin, spacing, isflip = UI_util.load_itk_image(fileName)
         if isflip:
             sliceim = sliceim[:, ::-1, ::-1]
             # print('flip!')
@@ -110,7 +98,7 @@ class savefile():
             num = num + 1
             line = line.rstrip()
             line = self.init_openpath + line
-            self.open(line)
+            self.openfile(line)
             self.detect()
 
 
