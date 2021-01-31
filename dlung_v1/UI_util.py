@@ -122,10 +122,9 @@ def split_data(data, stride, split_comber):
     ph = int(np.ceil(float(nh) / stride)) * stride
     pw = int(np.ceil(float(nw) / stride)) * stride
     data = np.pad(data, [[0, 0], [0, pz - nz], [0, ph - nh], [0, pw - nw]], 'constant', constant_values=0)
-    print(data.shape[1], data.shape[2], data.shape[3])
-    xx, yy, zz = np.meshgrid(np.linspace(-0.5, 0.5, data.shape[1] / stride),
-                             np.linspace(-0.5, 0.5, data.shape[2] / stride),
-                             np.linspace(-0.5, 0.5, data.shape[3] / stride), indexing='ij')
+    xx, yy, zz = np.meshgrid(np.linspace(-0.5, 0.5, int(data.shape[1] / stride)),
+                             np.linspace(-0.5, 0.5, int(data.shape[2] / stride)),
+                             np.linspace(-0.5, 0.5, int(data.shape[3] / stride)), indexing='ij')
     coord = np.concatenate([xx[np.newaxis, ...], yy[np.newaxis, ...], zz[np.newaxis, :]], 0).astype('float32')
 
     data, nzhw = split_comber.split(data)
