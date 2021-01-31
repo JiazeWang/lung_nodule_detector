@@ -15,7 +15,7 @@ from split_combine import SplitComb
 class savefile():
     def __init__(self, filename):
         super(savefile,self).__init__()
-        self.init_openpath = '/research/dept8/jzwang/dataset/LUNA16/combined'
+        self.init_openpath = '/research/dept8/jzwang/dataset/LUNA16/combined/'
         self.resolution = np.array([1,1,1])
         self.slice_index = 0
         self.slice_num = 0
