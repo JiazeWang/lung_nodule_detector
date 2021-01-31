@@ -30,11 +30,11 @@ class PostRes2d(nn.Module):
         out = self.relu(out)
         out = self.conv2(out)
         out = self.bn2(out)
-
+        
         out += residual
         out = self.relu(out)
         return out
-
+    
 class PostRes(nn.Module):
     def __init__(self, n_in, n_out, stride = 1):
         super(PostRes, self).__init__()
@@ -60,7 +60,7 @@ class PostRes(nn.Module):
         out = self.relu(out)
         out = self.conv2(out)
         out = self.bn2(out)
-
+        
         out += residual
         out = self.relu(out)
         return out
@@ -68,7 +68,7 @@ class PostRes(nn.Module):
 class Rec3(nn.Module):
     def __init__(self, n0, n1, n2, n3, p = 0.0, integrate = True):
         super(Rec3, self).__init__()
-
+        
         self.block01 = nn.Sequential(
             nn.Conv3d(n0, n1, kernel_size = 3, stride = 2, padding = 1),
             nn.BatchNorm3d(n1),
@@ -82,35 +82,35 @@ class Rec3(nn.Module):
             nn.ReLU(inplace = True),
             nn.Conv3d(n1, n1, kernel_size = 3, padding = 1),
             nn.BatchNorm3d(n1))
-
+        
         self.block21 = nn.Sequential(
             nn.ConvTranspose3d(n2, n1, kernel_size = 2, stride = 2),
             nn.BatchNorm3d(n1),
             nn.ReLU(inplace = True),
             nn.Conv3d(n1, n1, kernel_size = 3, padding = 1),
             nn.BatchNorm3d(n1))
-
+ 
         self.block12 = nn.Sequential(
             nn.Conv3d(n1, n2, kernel_size = 3, stride = 2, padding = 1),
             nn.BatchNorm3d(n2),
             nn.ReLU(inplace = True),
             nn.Conv3d(n2, n2, kernel_size = 3, padding = 1),
             nn.BatchNorm3d(n2))
-
+        
         self.block22 = nn.Sequential(
             nn.Conv3d(n2, n2, kernel_size = 3, padding = 1),
             nn.BatchNorm3d(n2),
             nn.ReLU(inplace = True),
             nn.Conv3d(n2, n2, kernel_size = 3, padding = 1),
             nn.BatchNorm3d(n2))
-
+        
         self.block32 = nn.Sequential(
             nn.ConvTranspose3d(n3, n2, kernel_size = 2, stride = 2),
             nn.BatchNorm3d(n2),
             nn.ReLU(inplace = True),
             nn.Conv3d(n2, n2, kernel_size = 3, padding = 1),
             nn.BatchNorm3d(n2))
-
+ 
         self.block23 = nn.Sequential(
             nn.Conv3d(n2, n3, kernel_size = 3, stride = 2, padding = 1),
             nn.BatchNorm3d(n3),
@@ -165,7 +165,7 @@ class Loss(nn.Module):
         batch_size = labels.size(0)
         output = output.view(-1, 5)
         labels = labels.view(-1, 5)
-
+        
         pos_idcs = labels[:, 0] > 0.5
         pos_idcs = pos_idcs.unsqueeze(1).expand(pos_idcs.size(0), 5)
         pos_output = output[pos_idcs].view(-1, 5)
@@ -386,7 +386,7 @@ def nms(output, nms_th):
 
     output = output[np.argsort(-output[:, 0])]
     bboxes = [output[0]]
-
+    
     for i in np.arange(1, len(output)):
         bbox = output[i]
         flag = 1
@@ -396,12 +396,12 @@ def nms(output, nms_th):
                 break
         if flag == 1:
             bboxes.append(bbox)
-
+    
     bboxes = np.asarray(bboxes, np.float32)
     return bboxes
 
 def iou(box0, box1):
-
+    
     r0 = box0[3] / 2
     s0 = box0[:3] - r0
     e0 = box0[:3] + r0

@@ -1,9 +1,7 @@
 import torch
 import sys
 from torch import nn
-#from layers import *
-sys.path.append('../nodule_detector')
-from training.layers import *
+from layers import *
 
 config = {}
 config['anchors'] = [ 5.0, 10.0, 30.0]
