@@ -65,7 +65,7 @@ class savefile():
         s = time.time()
         self.gt_path = '/research/dept8/jzwang/code/lung_nodule_integ_viewer/data/' + self.pt_num + '_label.npy'
         data, coord2, nzhw = UI_util.split_data(np.expand_dims(self.sliceim_re, axis=0),
-                                                self.stride, self.split_comber)
+                                                int(self.stride), self.split_comber)
 
 
         labels = np.load(self.gt_path)
