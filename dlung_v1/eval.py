@@ -91,7 +91,7 @@ class savefile():
 
     def process(self, filename):
         with open(filename, 'r') as f:
-            lines = f.readline()
+            lines = f.readlines()
         num = 0
         for line in lines:
             print("processing %s"%num)
