@@ -4,7 +4,6 @@ import numpy as np
 import cv2
 import time
 import math
-from xai_viewer_ui import Ui_xai_viewer
 import torch
 import res18_split_focal as detect_model
 import rule
