@@ -96,7 +96,7 @@ def resample(imgs, spacing, new_spacing, progressBar, order=2):
         raise ValueError('wrong shape')
 
 def resample_v1(imgs, spacing, new_spacing, order=2):
-    print (len(imgs.shape))
+    #print (len(imgs.shape))
     if len(imgs.shape)==3:
         new_shape = np.round(imgs.shape * spacing / new_spacing)
         true_spacing = spacing * imgs.shape / new_shape
@@ -116,7 +116,7 @@ def resample_v1(imgs, spacing, new_spacing, order=2):
         raise ValueError('wrong shape')
 
 def split_data(data, stride, split_comber):
-    print (data.shape[1:])
+    #print (data.shape[1:])
     nz, nh, nw = data.shape[1:]
     pz = int(np.ceil(float(nz) / stride)) * stride
     ph = int(np.ceil(float(nh) / stride)) * stride
