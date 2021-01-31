@@ -63,7 +63,7 @@ class savefile():
 
         self.world_pbb = UI_util.predict_nodule_v2(self.detect_net, data, coord2, nzhw,
                                self.n_per_run, self.split_comber, self.get_pbb)
-        labels_filename = "result/world_pbb_"+self.pt_num+".npy"
+        labels_filename = "result/"+self.pt_num+".npy"
         np.save(labels_filename, self.world_pbb)
 
 
