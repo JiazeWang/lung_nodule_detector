@@ -6,7 +6,6 @@ import time
 import math
 import torch
 import res18_split_focal as detect_model
-import rule
 from torch.nn import DataParallel
 from torch.backends import cudnn
 import SimpleITK as sitk
