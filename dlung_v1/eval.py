@@ -71,20 +71,8 @@ class savefile():
 
         e = time.time()
 
-        self.lbb, self.world_pbb = UI_util.predict_nodule_v2(self.detect_net, data, coord2, nzhw,
+        self.world_pbb = UI_util.predict_nodule_v2(self.detect_net, data, coord2, nzhw,
                                self.n_per_run, self.split_comber, self.get_pbb)
-
-        nodule_items = []
-        for i in range(len(self.lbb)):
-            if self.lbb[i][3] != 0:
-                nodule_items.append('gt_' + str(i))
-
-        for i in range(len(self.world_pbb)):
-            nodule_items.append('cand_' + str(i) + ' ' + str(round(self.world_pbb[i][0], 2)))
-        # print('elapsed time is %3.2f seconds' % (e - s))
-        UI_util.draw_nodule_rect(self.lbb, self.world_pbb, self.slice_arr)
-        num = 0
-        # print(" self.slice_arr.shape:", self.slice_arr.shape)
         labels_filename = "result/world_pbb_"+self.pt_num+".npy"
         np.save(labels_filename, self.world_pbb)
 
