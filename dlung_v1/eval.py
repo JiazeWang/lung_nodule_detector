@@ -70,8 +70,8 @@ class savefile():
     def openfile(self, filename):
         #TODO: file type
 
-        self.pt_num = fileName.split('/')[-1].split('.mhd')[0]
-        sliceim, origin, spacing, isflip = UI_util.load_itk_image(fileName)
+        self.pt_num = filename.split('/')[-1].split('.mhd')[0]
+        sliceim, origin, spacing, isflip = UI_util.load_itk_image(filename)
         if isflip:
             sliceim = sliceim[:, ::-1, ::-1]
             # print('flip!')
