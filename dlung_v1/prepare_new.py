@@ -96,7 +96,7 @@ def main():
 
     if not os.path.exists(lung_mask_dir):
         os.makedirs(lung_mask_dir)
-    with open(data_txt, "r") as f:
+    with open(os.path.join(img_dir, data_txt), "r") as f:
         lines = f.readlines()
     params_lists = []
     for line in lines:
