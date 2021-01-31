@@ -1,8 +1,6 @@
 import os
 import shutil
 import numpy as np
-from config_training import config
-import numpy as np
 from scipy.ndimage.interpolation import zoom
 import SimpleITK as sitk
 from scipy.ndimage.morphology import binary_dilation,generate_binary_structure
