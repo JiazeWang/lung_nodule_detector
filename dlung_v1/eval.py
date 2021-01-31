@@ -128,4 +128,4 @@ class savefile():
 
 
 if __name__ == '__main__':
-    savefile(filename="/research/dept8/jzwang/dataset/LUNA16/combined/1.3.6.1.4.1.14519.5.2.1.6279.6001.100225287222365663678666836860.mhdd")
+    savefile(filename="/research/dept8/jzwang/dataset/LUNA16/combined/1.3.6.1.4.1.14519.5.2.1.6279.6001.100225287222365663678666836860.mhd")
