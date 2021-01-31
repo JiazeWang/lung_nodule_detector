@@ -15,22 +15,20 @@ from split_combine import SplitComb
 class savefile():
     def __init__(self, filename):
         super(savefile,self).__init__()
-        self.init_openpath = '/home/imsight/data/demo/'
+        self.init_openpath = '/research/dept8/jzwang/dataset/LUNA16/'
         self.resolution = np.array([1,1,1])
         self.slice_index = 0
         self.slice_num = 0
         self.slice_width = 0
         self.slice_height = 0
         self.detect_resume = './detector.ckpt'
-        self.attribute_resume = './attribute.ckpt'
         self.gpu = '0'
         self.detect_net, self.split_comber, self.get_pbb \
             = self.init_net()
         self.stride = 4
         self.n_per_run = 1
         self.filename = filename
-        self.open(self.filename)
-        self.detect()
+        self.process(self.filename)
 
 
     def init_net(self):
@@ -54,22 +52,14 @@ class savefile():
         margin = 32
         sidelen = 144
         split_comber = SplitComb(sidelen, detect_config['max_stride'], detect_config['stride'], margin, detect_config['pad_value'])
-
-        # print ("init_net complete")
         return detect_net, split_comber, get_pbb
 
 
     def detect(self):
         if (self.slice_num <= 0):
             return 0
-        s = time.time()
-        self.gt_path = '/research/dept8/jzwang/code/lung_nodule_integ_viewer/data/' + self.pt_num + '_label.npy'
         data, coord2, nzhw = UI_util.split_data(np.expand_dims(self.sliceim_re, axis=0),
                                                 self.stride, self.split_comber)
-
-
-
-        e = time.time()
 
         self.world_pbb = UI_util.predict_nodule_v2(self.detect_net, data, coord2, nzhw,
                                self.n_per_run, self.split_comber, self.get_pbb)
@@ -111,9 +101,21 @@ class savefile():
         self.slice_index = int(self.slice_num/2)
         img = np.array(self.slice_arr[self.slice_index], dtype=np.uint8)
 
+    def process(filename):
+        with open(filename, 'r') as f:
+            lines = f.readline()
+        num = 0
+        for line in lines:
+            print("processing %s"%num)
+            num = num + 1
+            line = line.rstrip()
+            line = self.init_openpath + line
+            self.open(line)
+            self.detect()
+
 
 
 
 
 if __name__ == '__main__':
-    savefile(filename="/research/dept8/jzwang/dataset/LUNA16/combined/1.3.6.1.4.1.14519.5.2.1.6279.6001.100225287222365663678666836860.mhd")
+    savefile(filename="/research/dept8/jzwang/dataset/LUNA16/list.txt")
