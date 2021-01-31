@@ -101,7 +101,7 @@ class savefile():
         self.slice_index = int(self.slice_num/2)
         img = np.array(self.slice_arr[self.slice_index], dtype=np.uint8)
 
-    def process(filename):
+    def process(self, filename):
         with open(filename, 'r') as f:
             lines = f.readline()
         num = 0
