@@ -68,11 +68,10 @@ class savefile():
                                                 self.stride, self.split_comber)
 
 
-        labels = np.load(self.gt_path)
 
         e = time.time()
 
-        self.lbb, self.world_pbb = UI_util.predict_nodule_v1(self.detect_net, data, coord2, nzhw, labels,
+        self.lbb, self.world_pbb = UI_util.predict_nodule_v2(self.detect_net, data, coord2, nzhw,
                                self.n_per_run, self.split_comber, self.get_pbb)
 
         nodule_items = []
@@ -129,4 +128,4 @@ class savefile():
 
 
 if __name__ == '__main__':
-    savefile(filename="/research/dept8/jzwang/code/lung_nodule_integ_viewer/data/001.mhd")
+    savefile(filename="/research/dept8/jzwang/dataset/LUNA16/combined/1.3.6.1.4.1.14519.5.2.1.6279.6001.100225287222365663678666836860.mhdd")

@@ -288,6 +288,68 @@ def predict_nodule_v1(net, data, coord, nzhw, lbb, n_per_run, split_comber, get_
 
     return lbb, world_pbb
 
+
+def predict_nodule_v2(net, data, coord, nzhw, n_per_run, split_comber, get_pbb):
+
+    net.eval()
+
+    total_label = 0
+    total_candi = 0
+
+    splitlist = list(range(0, len(data) + 1, n_per_run))
+
+    if splitlist[-1] != len(data):
+        splitlist.append(len(data))
+    outputlist = []
+
+    for i in range(len(splitlist) - 1):
+        with torch.no_grad():
+            inputdata = Variable(data[splitlist[i]:splitlist[i + 1]]).cuda()
+            inputcoord = Variable(coord[splitlist[i]:splitlist[i + 1]]).cuda()
+            output = net(inputdata, inputcoord)
+            outputlist.append(output.data.cpu().numpy())
+    output = np.concatenate(outputlist, 0)
+    output = split_comber.combine(output, nzhw=nzhw)
+
+    # fps 1.215909091, sens 0.933333333, thres 0.371853054
+    thresh = 0.371853054
+    pbb, mask = get_pbb(output, thresh, ismask=True)
+
+    pbb = pbb[pbb[:, 0].argsort()[::-1]]
+    pbb_cand_list = []
+    # check overlap under 3mm
+    for cand in pbb:
+        is_overlap = False
+        for appended in pbb_cand_list:
+            minimum_dist = 3
+            dist = math.sqrt(
+                math.pow(appended[1] - cand[1], 2) + math.pow(appended[2] - cand[2], 2) + math.pow(
+                    appended[3] - cand[3], 2))
+            if (dist < minimum_dist):
+                is_overlap = True
+                break;
+
+        if not is_overlap:
+            pbb_cand_list.append(cand)
+
+    pbb_cand_list = np.array(pbb_cand_list)
+    pbb_cand_list_nms = nms(pbb_cand_list, 0.3)
+
+    # print (name)
+    # print (lbb)
+    world_pbb = convert_prob(pbb_cand_list_nms)
+    # print (world_pbb)
+    print("z_pos   y_pos   x_pos   size")
+    print("candidate", len(world_pbb))
+    print("prob    z_pos   y_pos   x_pos   size")
+    for i in range(len(world_pbb)):
+        for j in range(len(world_pbb[i])):
+            print(round(world_pbb[i][j], 2), end='\t')
+        print()
+    total_candi += len(world_pbb)
+
+    return world_pbb
+
 def draw_nodule_rect(lbb, world_pbb, img_arr):
     for i in range(len(lbb)):
         label = lbb[i]
