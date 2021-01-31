@@ -11,7 +11,6 @@ from torch.backends import cudnn
 import SimpleITK as sitk
 from utils import *
 from split_combine import SplitComb
-from save_sitk import savedicom
 #TODO: nodule view rescale feature add
 class savefile():
     def __init__(self, filename):
@@ -115,7 +114,6 @@ class savefile():
 
 
         self.sliceim_re, _ = UI_util.resample_v1(sliceim, spacing, self.resolution, order=1)
-        savedicom(outputdir="result/"+self.pt_num, input=self.sliceim_re,  pixel_dtypes="int16")
         self.slice_arr = np.zeros((np.shape(self.sliceim_re)[0], np.shape(self.sliceim_re)[1], np.shape(self.sliceim_re)[2], 3))
         self.slice_num = np.shape(self.sliceim_re)[0]
         self.slice_height = np.shape(self.sliceim_re)[1]
