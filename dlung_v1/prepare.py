@@ -13,7 +13,6 @@ import pandas
 import sys
 import math
 import glob
-import nrrd
 from multiprocessing import Pool
 from config import config
 
