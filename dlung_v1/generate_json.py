@@ -23,8 +23,8 @@ def convert_worldcoord(idx, pbb, filename):
         radious_ori = label[4]
         #pos_ori = pos_ori + extendbox[:, 0]
         pos_ori = pos_ori * resolution / spacing
-        pos_ori = pos_ori * spacing
-        pos_ori = pos_ori + origin
+        #pos_ori = pos_ori * spacing
+        #pos_ori = pos_ori + origin
         pos_ori = pos_ori[::-1]
 
         radious_ori = radious_ori / spacing[1] * resolution[1]
