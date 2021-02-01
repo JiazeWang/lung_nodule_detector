@@ -13,7 +13,6 @@ import io
 from config import config
 
 def sigmoid(x):
-  print(x)
   return 1 / (1 + math.exp(-x))
 
 
@@ -73,7 +72,7 @@ if __name__ == '__main__':
         print("processing %s"%i)
         line = lines[i].rstrip()
         line = "_".join(line.split('/'))
-        pbbdir =  np.load(config["npy_dir"] + line + "_clean.npy")
+        pbbdir =  np.load(config["result"] + line + ".npy")
         origin_dir = np.load(config["npy_dir"] + line + "_origin.npy")
         spacing_dir = np.load(config["npy_dir"] + line + "_spacing.npy")
         pbb_item = pbbdir
