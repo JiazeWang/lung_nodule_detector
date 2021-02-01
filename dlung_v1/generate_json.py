@@ -74,7 +74,7 @@ if __name__ == '__main__':
         origin_dir = np.load(config["npy_dir"] + line + "_origin.npy")
         spacing_dir = np.load(config["npy_dir"] + line + "_spacing.npy")
         pbb_item = pbbdir
-        filename_dict[i] = str(line)
+        filename_dict[i] = config["npy_dir"] + str(line)
         pbb_item = pbb_item[pbb_item[:, 0].argsort()[::-1]]
         pbb_append_list = []
         for item in pbb_item:
@@ -99,15 +99,9 @@ if __name__ == '__main__':
     for i in range(len(pbb)):
         nms_pbb = nms(pbb[i], nms_th)
         world_pbb = convert_worldcoord(i, nms_pbb, filename_dict[i])
-        print (filename_dict[i])
-        s_id = namelist[ids.index(int(filename_dict[i]))]
-        #csv_sid.append([s_id.encode()])
-        csv_sid.append([s_id])
+        s_id = filename_dict[i]
         for candidate in world_pbb:
             csv_submit.append([s_id, candidate[1], candidate[2], candidate[3], candidate[0]])
 
     df_annos = pandas.DataFrame(csv_submit, columns=["seriesuid", "coordX", "coordY", "coordZ", "probability"])
     df_annos.to_csv(submit_file, index=False)
-
-    df_annos = pandas.DataFrame(csv_sid)
-    df_annos.to_csv(sid, index=False, header=False)
