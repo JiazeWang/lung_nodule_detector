@@ -257,7 +257,8 @@ def main():
         params_lists.append(os.path.join(img_dir, line))
     pool = Pool(processes=10)
     result = pool.map(load_itk_series, params_lists)
-    record_series.append(result)
+    for item in result:
+        record_series.append(item)
     pool.close()
     pool.join()
     print(record_series)
