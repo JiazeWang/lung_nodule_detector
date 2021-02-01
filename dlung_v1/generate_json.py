@@ -87,6 +87,10 @@ def convert_json(input, output, thresholds=0.5):
             nudule["NoduleCoordinates"] = NoduleCoordinates
             nudule["NoduleDiameter"] = NoduleDiameter
             NoduleClass, NoduleScore, NoduleCoordinates, NoduleDiameter = [], [], [], []
+            if float(line[-1])> thresholds:
+                NoduleClass.append(1)
+            else:
+                NoduleClass.append(0)
             NoduleScore.append(line[-1])
             NoduleCoordinates.append([line[1], line[2], line[3]])
             NoduleDiameter.append(line[4])
