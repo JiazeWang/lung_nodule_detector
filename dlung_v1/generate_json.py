@@ -13,6 +13,7 @@ import io
 from config import config
 
 def sigmoid(x):
+  print(x)
   return 1 / (1 + math.exp(-x))
 
 
