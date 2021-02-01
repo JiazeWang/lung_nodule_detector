@@ -250,13 +250,14 @@ def main():
         lines = f.readlines()
     record_series = []
     record = []
+    params_lists = []
     for line in lines:
         line = line.rstrip()
         savedir = '_'.join(line.split("/"))
         params_lists.append(os.path.join(img_dir, line))
     pool = Pool(processes=10)
     result = pool.map(load_itk_series, params_lists)
-    print(result)
+    record_series.append(result)
     pool.close()
     pool.join()
     with open("record_series.txt",'w') as f:
