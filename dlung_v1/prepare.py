@@ -120,9 +120,9 @@ def load_itk_series(filename):
         dcm_series = reader.GetGDCMSeriesFileNames(filename, seriesIDs[i])
         reader.SetFileNames(dcm_series)
         img = reader.Execute()
-        numpyImage = sitk.GetArrayFromImage(img)
+        #numpyImage = sitk.GetArrayFromImage(img)
         output = os.path.join(config["npy_dir"], seriesIDs[i]+'.mhd')
-        sitk.WriteImage(numpyImage, output)
+        sitk.WriteImage(numpyImage, img)
     return [filename, seriesIDs]
 
 def lumTrans(image, HU_min=-1200.0, HU_max=600.0, HU_nan=-2000.0):
