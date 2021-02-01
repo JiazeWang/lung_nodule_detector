@@ -60,7 +60,8 @@ class savefile():
         self.world_pbb = UI_util.predict_nodule_v2(self.detect_net, data, coord2, nzhw,
                                self.n_per_run, self.split_comber, self.get_pbb)
         labels_filename = config["result"]+filename+".npy"
-        np.save(labels_filename, self.world_pbb)
+        if self.world_pbb.shape[0]!=0:
+            np.save(labels_filename, self.world_pbb)
 
     def process(self, filename):
         with open(filename, 'r') as f:
