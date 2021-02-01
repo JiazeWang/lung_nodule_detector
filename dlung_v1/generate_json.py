@@ -58,6 +58,7 @@ def duplicate_file(in_filename):
 
 if __name__ == '__main__':
     pbb = []
+    resolution = np.array([1,1,1])
     filename_dict = {}
     csv_submit = []
     csv_sid = []
