@@ -123,7 +123,7 @@ def load_itk_series(filename):
         #numpyImage = sitk.GetArrayFromImage(img)
         output = os.path.join(config["npy_dir"], seriesIDs[i]+'.mhd')
         sitk.WriteImage(img, output)
-    return filename+"    "+"     ".join(seriesIDs)
+    return filename+"    "+"    ".join(seriesIDs)
 
 def lumTrans(image, HU_min=-1200.0, HU_max=600.0, HU_nan=-2000.0):
     """
@@ -268,7 +268,7 @@ def main():
     record_name = []
     for line in record_series:
         line = line.rstrip()
-        line = line.split('    ')
+        line = line.split('')
         for i in range(1, len(line)):
             record_name.append(line[i])
     with open("record_series_list.txt",'w') as f:
