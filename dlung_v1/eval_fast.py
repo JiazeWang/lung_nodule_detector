@@ -85,6 +85,7 @@ class savefile():
         self.slice_arr = np.zeros((np.shape(self.sliceim_re)[0], np.shape(self.sliceim_re)[1], np.shape(self.sliceim_re)[2], 3))
         for i in range(len(self.sliceim_re)):
             self.slice_arr[i] = cv2.cvtColor(self.sliceim_re[i], 8)
+        print("self.slice_arr.shape:", self.slice_arr.shape)
 
     def process(self, filename):
         with open(filename, 'r') as f:
