@@ -10,7 +10,6 @@ import pandas
 import sys
 import math
 import glob
-from bs4 import BeautifulSoup
 import nrrd
 from multiprocessing import Pool
 
