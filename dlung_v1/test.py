@@ -68,6 +68,7 @@ class savefile():
         with open(filename, 'r') as f:
             lines = f.readlines()
         num = 0
+        namenew = []
         if not os.path.exists(config["result"]):
             os.makedirs(config["result"])
         for line in lines:
