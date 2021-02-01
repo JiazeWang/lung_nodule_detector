@@ -108,8 +108,6 @@ class savefile():
             filedir = self.init_openpath + line + "_clean.npy"
             #print(line)
             self.opennumpy(filedir, line)
-            self.detect()
-
 
 
 
