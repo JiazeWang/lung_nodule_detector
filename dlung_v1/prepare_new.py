@@ -5,6 +5,7 @@ from scipy.ndimage.interpolation import zoom
 import SimpleITK as sitk
 from scipy.ndimage.morphology import binary_dilation,generate_binary_structure
 from skimage.morphology import convex_hull_image
+from skimage import measure, morphology
 from lungmask import mask
 import pandas
 import sys
