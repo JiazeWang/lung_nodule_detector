@@ -137,7 +137,7 @@ def load_itk_series(filedir):
             seriesIDsnew.append(seriesIDs[i])
             output = os.path.join(config["mhd_dir"], seriesIDs[i]+'.mhd')
             sitk.WriteImage(img, output)
-    return filename+"    "+"    ".join(seriesIDsnew)
+    return filedir+"    "+"    ".join(seriesIDsnew)
 
 def lumTrans(image, HU_min=-1200.0, HU_max=600.0, HU_nan=-2000.0):
     """
