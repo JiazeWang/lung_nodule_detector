@@ -26,24 +26,65 @@ def get_lung(filename, output):
     output = output+'.mhd'
     sitk.WriteImage(result_out, output)
 
-def resample(imgs, spacing, new_spacing,order=2):
-    if len(imgs.shape)==3:
-        new_shape = np.round(imgs.shape * spacing / new_spacing)
-        true_spacing = spacing * imgs.shape / new_shape
-        resize_factor = new_shape / imgs.shape
-        imgs = zoom(imgs, resize_factor, mode = 'nearest',order=order)
-        return imgs, true_spacing
-    elif len(imgs.shape)==4:
-        n = imgs.shape[-1]
-        newimg = []
-        for i in range(n):
-            slice = imgs[:,:,:,i]
-            newslice,true_spacing = resample(slice,spacing,new_spacing)
-            newimg.append(newslice)
-        newimg=np.transpose(np.array(newimg),[1,2,3,0])
-        return newimg,true_spacing
-    else:
-        raise ValueError('wrong shape')
+def resample(image, spacing, new_spacing=[1.0, 1.0, 1.0], order=1):
+    """
+    Resample image from the original spacing to new_spacing, e.g. 1x1x1
+    image: 3D numpy array of raw HU values from CT series in [z, y, x] order.
+    spacing: float * 3, raw CT spacing in [z, y, x] order.
+    new_spacing: float * 3, new spacing used for resample, typically 1x1x1,
+        which means standardizing the raw CT with different spacing all into
+        1x1x1 mm.
+    order: int, order for resample function scipy.ndimage.interpolation.zoom
+    return: 3D binary numpy array with the same shape of the image after,
+        resampling. The actual resampling spacing is also returned.
+    """
+    # shape can only be int, so has to be rounded.
+    new_shape = np.round(image.shape * spacing / new_spacing)
+
+    # the actual spacing to resample.
+    resample_spacing = spacing * image.shape / new_shape
+
+    resize_factor = new_shape / image.shape
+
+    image_new = scipy.ndimage.interpolation.zoom(image, resize_factor,
+                                                 mode='nearest', order=order)
+
+    return (image_new, resample_spacing)
+
+def get_lung_box(binary_mask, new_shape, margin=5):
+    """
+    Get the lung barely surrounding the lung based on the binary_mask and the
+    new_spacing.
+    binary_mask: 3D binary numpy array with the same shape of the image,
+        that only region of both sides of the lung is True.
+    new_shape: tuple of int * 3, new shape of the image after resamping in
+        [z, y, x] order.
+    margin: int, number of voxels to extend the boundry of the lung box.
+    return: 3x2 2D int numpy array denoting the
+        [z_min:z_max, y_min:y_max, x_min:x_max] of the lung box with respect to
+        the image after resampling.
+    """
+    # list of z, y x indexes that are true in binary_mask
+    z_true, y_true, x_true = np.where(binary_mask)
+    old_shape = binary_mask.shape
+
+    lung_box = np.array([[np.min(z_true), np.max(z_true)],
+                        [np.min(y_true), np.max(y_true)],
+                        [np.min(x_true), np.max(x_true)]])
+    lung_box = lung_box * 1.0 * \
+        np.expand_dims(new_shape, 1) / np.expand_dims(old_shape, 1)
+    lung_box = np.floor(lung_box).astype('int')
+
+    z_min, z_max = lung_box[0]
+    y_min, y_max = lung_box[1]
+    x_min, x_max = lung_box[2]
+
+    # extend the lung_box by a margin
+    lung_box[0] = max(0, z_min-margin), min(new_shape[0], z_max+margin)
+    lung_box[1] = max(0, y_min-margin), min(new_shape[1], y_max+margin)
+    lung_box[2] = max(0, x_min-margin), min(new_shape[2], x_max+margin)
+
+    return lung_box
 
 def worldToVoxelCoord(worldCoord, origin, spacing):
 
@@ -164,15 +205,21 @@ def savenpy_luna_attribute(params_lists):
     resolution = np.array([1, 1, 1])
     sliceim, origin, spacing = load_itk_dicom(inputpath)
     lung_mask, _, _ = load_itk_image(maskpath)
-    ori_sliceim_shape_yx = sliceim.shape[1:3]
-    sliceim = lumTrans(sliceim)
     binary_mask1, binary_mask2 = lung_mask == 1, lung_mask == 2
     binary_mask = binary_mask1 + binary_mask2
+    ori_sliceim_shape_yx = sliceim.shape[1:3]
+    sliceim = lumTrans(sliceim)
     sliceim = apply_mask(sliceim, binary_mask1, binary_mask2)
     sliceim1, _ = resample(sliceim, spacing, resolution, order=1)
-    sliceim = sliceim1[np.newaxis, ...]
-    np.save(savepath + '_clean.npy', sliceim)
-    nrrd.write(savepath + '_clean.nrrd', sliceim)
+    seg_img = sliceim1
+    lung_box = get_lung_box(binary_mask, seg_img.shape)
+    z_min, z_max = lung_box[0]
+    y_min, y_max = lung_box[1]
+    x_min, x_max = lung_box[2]
+    seg_img = seg_img[z_min:z_max, y_min:y_max, x_min:x_max]
+    #sliceim = sliceim1[np.newaxis, ...]
+    np.save(savepath + '_clean.npy', seg_img)
+    nrrd.write(savepath + '_clean.nrrd', seg_img)
     return 1
 
 def main():
