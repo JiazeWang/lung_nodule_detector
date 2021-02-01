@@ -4,7 +4,7 @@ import os
 BASE = os.path.realpath(__file__)[:-9]  # assume the BASE dir is 'data'  ' # make sure we have the ending '/'
 data_config = {
     "img_dir" : BASE + "data/",
-    "data_txt" : BASE + "/research/dept8/jzwang/dataset/LUNA16/combined.txt",
+    "data_txt" : BASE + "data/filedir.txt",
     "lung_mask_dir" : BASE + "data/lung_mask/",
     "npy_dir" : "data/npy/",
     "mhd_dir": BASE + "data/mhd/",
