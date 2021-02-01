@@ -142,8 +142,8 @@ if __name__ == '__main__':
         world_pbb = convert_worldcoord(i, nms_pbb, filename_dict[i])
         s_id = filename_dict[i]
         for candidate in world_pbb:
-            csv_submit.append([s_id, candidate[1], candidate[2], candidate[3], candidate[0]])
+            csv_submit.append([s_id, candidate[1], candidate[2], candidate[3], candidate[4], candidate[0]])
 
-    df_annos = pandas.DataFrame(csv_submit, columns=["seriesuid", "coordX", "coordY", "coordZ", "probability"])
+    df_annos = pandas.DataFrame(csv_submit, columns=["seriesuid", "coordX", "coordY", "coordZ", "size", "probability"])
     df_annos.to_csv(submit_file, index=False)
     convert_json('submission.txt', "result.json")
