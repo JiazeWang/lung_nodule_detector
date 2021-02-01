@@ -129,7 +129,7 @@ def load_itk_series(filename):
         reader.SetFileNames(dcm_series)
         img = reader.Execute()
         numpyImage = sitk.GetArrayFromImage(img)
-        if numpyImage.shape[0]==2:
+        if numpyImage.shape[0]<=10:
             continue
         else:
             seriesIDsnew.append(seriesIDs[i])
