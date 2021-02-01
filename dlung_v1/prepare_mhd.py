@@ -238,11 +238,13 @@ def main():
     for line in lines:
         print("lung segmentation:", line)
         line = line.rstrip()
+        line = line[0:-4]
         savedir = '_'.join(line.split("/"))
         get_lung(os.path.join("/research/dept8/jzwang/dataset/LUNA16/combined", line), os.path.join(lung_mask_dir, savedir))
     params_lists = []
     for line in lines:
         line = line.rstrip()
+        line = line[0:-4]
         savename = '_'.join(line.split("/"))
         npy_savepath = os.path.join(npy_dir, savename)
         mask_savepath =  os.path.join(lung_mask_dir, savename+'.mhd')
