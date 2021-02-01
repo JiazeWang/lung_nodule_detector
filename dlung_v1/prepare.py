@@ -26,6 +26,13 @@ def get_lung(filename, output):
     output = output+'.mhd'
     sitk.WriteImage(result_out, output)
 
+def get_lung_mhd(filename, output):
+    img = sitk.ReadImage(filename)
+    segmentation = mask.apply(img)
+    result_out= sitk.GetImageFromArray(segmentation)
+    output = output+'.mhd'
+    sitk.WriteImage(result_out, output)
+
 def resample(image, spacing, new_spacing=[1.0, 1.0, 1.0], order=1):
     """
     Resample image from the original spacing to new_spacing, e.g. 1x1x1
@@ -121,7 +128,7 @@ def load_itk_series(filename):
         reader.SetFileNames(dcm_series)
         img = reader.Execute()
         #numpyImage = sitk.GetArrayFromImage(img)
-        output = os.path.join(config["npy_dir"], seriesIDs[i]+'.mhd')
+        output = os.path.join(config["mhd_dir"], seriesIDs[i]+'.mhd')
         sitk.WriteImage(img, output)
     return filename+"    "+"    ".join(seriesIDs)
 
@@ -216,7 +223,7 @@ def savenpy_luna_attribute(params_lists):
     islabel = True
     isClean = True
     resolution = np.array([1, 1, 1])
-    sliceim, origin, spacing = load_itk_dicom(inputpath)
+    sliceim, origin, spacing = load_itk_image(inputpath)
     lung_mask, _, _ = load_itk_image(maskpath)
     np.save(savepath + '_origin.npy', origin)
     np.save(savepath + '_spacing.npy', spacing)
@@ -273,26 +280,23 @@ def main():
             record_name.append(line[i])
     with open("record_series_list.txt",'w') as f:
         f.write('\n'.join(record_name))
-
-
-    """
-    for line in lines:
+    for line in record_name:
         print("lung segmentation:", line)
         line = line.rstrip()
-        savedir = '_'.join(line.split("/"))
-        get_lung(os.path.join(img_dir, line), os.path.join(lung_mask_dir, savedir))
+        savedir = line
+        get_lung_mhd(os.path.join(config["mhd_dir"], line+'mhd'), os.path.join(lung_mask_dir, line))
+
     params_lists = []
-    for line in lines:
+    for line in record_name:
         line = line.rstrip()
-        savename = '_'.join(line.split("/"))
+        savename = line
         npy_savepath = os.path.join(npy_dir, savename)
         mask_savepath =  os.path.join(lung_mask_dir, savename+'.mhd')
-        params_lists.append([os.path.join(img_dir, line), npy_savepath, mask_savepath])
+        params_lists.append([os.path.join(img_dir, line+'.mhd'), npy_savepath, mask_savepath])
     pool = Pool(processes=10)
     pool.map(savenpy_luna_attribute, params_lists)
     pool.close()
     pool.join()
-    """
 
 if __name__=='__main__':
     main()
