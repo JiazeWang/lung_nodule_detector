@@ -128,7 +128,7 @@ def load_itk_series(filename):
         reader.SetFileNames(dcm_series)
         img = reader.Execute()
         #numpyImage = sitk.GetArrayFromImage(img)
-        output = os.path.join(mhd_dir, seriesIDs[i]+'.mhd')
+        output = os.path.join(config["mhd_dir"], seriesIDs[i]+'.mhd')
         sitk.WriteImage(img, output)
     return filename+"    "+"    ".join(seriesIDs)
 
