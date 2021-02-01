@@ -113,7 +113,6 @@ if __name__ == '__main__':
     for i in range(len(lines)):
         print("processing %s"%i)
         line = lines[i].rstrip()
-        if os.path.exists(config["result"] + line + ".npy"):
         pbbdir =  np.load(config["result"] + line + ".npy")
         origin_dir = np.load(config["npy_dir"] + line + "_origin.npy")
         spacing_dir = np.load(config["npy_dir"] + line + "_spacing.npy")
