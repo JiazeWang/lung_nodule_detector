@@ -15,7 +15,7 @@ from split_combine import SplitComb
 class savefile():
     def __init__(self, filename):
         super(savefile,self).__init__()
-        self.init_openpath = '/research/dept8/jzwang/dataset/LUNA16/combined/'
+        self.init_openpath = '/research/dept8/jzwang/code/lung_nodule_detector/dlung_v1/npy/'
         self.resolution = np.array([1,1,1])
         self.slice_index = 0
         self.slice_num = 0
@@ -80,6 +80,12 @@ class savefile():
         self.slice_index = int(self.slice_num/2)
         img = np.array(self.slice_arr[self.slice_index], dtype=np.uint8)
 
+    def opennumpy(self, filename):
+        self.sliceim_re = np.load(filename)
+        self.slice_arr = np.zeros((np.shape(self.sliceim_re)[0], np.shape(self.sliceim_re)[1], np.shape(self.sliceim_re)[2], 3))
+        for i in range(len(self.sliceim_re)):
+            self.slice_arr[i] = cv2.cvtColor(self.sliceim_re[i], 8)
+
     def process(self, filename):
         with open(filename, 'r') as f:
             lines = f.readlines()
@@ -88,9 +94,9 @@ class savefile():
             print("processing %s"%num)
             num = num + 1
             line = line.rstrip()
-            line = self.init_openpath + line
+            line = self.init_openpath + line + ".npy"
             #print(line)
-            self.openfile(line)
+            self.opennumpy(line)
             self.detect()
 
 
