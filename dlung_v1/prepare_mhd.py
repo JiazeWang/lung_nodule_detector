@@ -246,7 +246,7 @@ def main():
     params_lists = []
     for line in lines:
         line = line.rstrip()
-        line = line[0:-4]
+        line = line
         savename = '_'.join(line.split("/"))
         npy_savepath = os.path.join(npy_dir, savename)
         mask_savepath =  os.path.join(lung_mask_dir, savename+'.mhd')
