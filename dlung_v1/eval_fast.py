@@ -12,6 +12,7 @@ import SimpleITK as sitk
 from utils import *
 from split_combine import SplitComb
 #TODO: nodule view rescale feature add
+from config import config
 class savefile():
     def __init__(self, filename):
         super(savefile,self).__init__()
@@ -46,41 +47,7 @@ class savefile():
         split_comber = SplitComb(sidelen, detect_config['max_stride'], detect_config['stride'], margin, detect_config['pad_value'])
         return detect_net, split_comber, get_pbb
 
-
-    def detect(self):
-        if (self.slice_num <= 0):
-            return 0
-        data, coord2, nzhw = UI_util.split_data(np.expand_dims(self.sliceim_re, axis=0),
-                                                self.stride, self.split_comber)
-
-        self.world_pbb = UI_util.predict_nodule_v2(self.detect_net, data, coord2, nzhw,
-                               self.n_per_run, self.split_comber, self.get_pbb)
-        labels_filename = "result/"+self.pt_num+".npy"
-        np.save(labels_filename, self.world_pbb)
-
-
-    def openfile(self, filename):
-        #TODO: file type
-
-        self.pt_num = filename.split('/')[-1].split('.mhd')[0]
-        sliceim, origin, spacing, isflip = UI_util.load_itk_image(filename)
-        if isflip:
-            sliceim = sliceim[:, ::-1, ::-1]
-        sliceim = UI_util.lumTrans(sliceim)
-
-
-        self.sliceim_re, _ = UI_util.resample_v1(sliceim, spacing, self.resolution, order=1)
-        self.slice_arr = np.zeros((np.shape(self.sliceim_re)[0], np.shape(self.sliceim_re)[1], np.shape(self.sliceim_re)[2], 3))
-        self.slice_num = np.shape(self.sliceim_re)[0]
-        self.slice_height = np.shape(self.sliceim_re)[1]
-        self.slice_width = np.shape(self.sliceim_re)[2]
-        for i in range(len(self.sliceim_re)):
-            self.slice_arr[i] = cv2.cvtColor(self.sliceim_re[i], 8)
-        # print ("finish convert")
-        self.slice_index = int(self.slice_num/2)
-        img = np.array(self.slice_arr[self.slice_index], dtype=np.uint8)
-
-    def opennumpy(self, filedir, filename):
+    def detect(self, filedir, filename):
         self.sliceim_re = np.load(filedir)
         self.slice_arr = np.zeros((np.shape(self.sliceim_re)[0], np.shape(self.sliceim_re)[1], np.shape(self.sliceim_re)[2], 3))
         self.slice_num = np.shape(self.sliceim_re)[0]
@@ -107,10 +74,10 @@ class savefile():
             line = "_".join(line.split('/'))
             filedir = self.init_openpath + line + "_clean.npy"
             #print(line)
-            self.opennumpy(filedir, line)
+            self.detect(filedir, line)
 
 
 
 
 if __name__ == '__main__':
-    savefile(filename="/research/dept8/jzwang/code/NoduleNet/dlung_v1/data/filedir.txt")
+    savefile(filename=config["data_txt"])

@@ -15,6 +15,7 @@ import math
 import glob
 import nrrd
 from multiprocessing import Pool
+from config import config
 
 def get_lung(filename, output):
     reader = sitk.ImageSeriesReader()
@@ -205,6 +206,8 @@ def savenpy_luna_attribute(params_lists):
     resolution = np.array([1, 1, 1])
     sliceim, origin, spacing = load_itk_dicom(inputpath)
     lung_mask, _, _ = load_itk_image(maskpath)
+    np.save(savepath + '_origin.npy', origin)
+    np.save(savepath + '_spacing.npy', spacing)
     binary_mask1, binary_mask2 = lung_mask == 1, lung_mask == 2
     binary_mask = binary_mask1 + binary_mask2
     ori_sliceim_shape_yx = sliceim.shape[1:3]
@@ -219,17 +222,19 @@ def savenpy_luna_attribute(params_lists):
     seg_img = seg_img[z_min:z_max, y_min:y_max, x_min:x_max]
     #sliceim = sliceim1[np.newaxis, ...]
     np.save(savepath + '_clean.npy', seg_img)
-    nrrd.write(savepath + '_clean.nrrd', seg_img)
+    #nrrd.write(savepath + '_clean.nrrd', seg_img)
     return 1
 
 def main():
-    img_dir = "/research/dept8/jzwang/code/NoduleNet/dlung_v1/data"
-    data_txt = "filedir.txt"
-    lung_mask_dir = "./lung_mask"
-    npy_dir = "./npy"
+    img_dir = config["img_dir"]
+    data_txt = config["data_txt"]
+    lung_mask_dir = config["lung_mask_dir"]
+    npy_dir = config["npy_dir"]
     if not os.path.exists(lung_mask_dir):
         os.makedirs(lung_mask_dir)
-    with open(os.path.join(img_dir, data_txt), "r") as f:
+    if not os.path.exists(npy_dir):
+        os.makedirs(npy_dir)
+    with open("data_txt", "r") as f:
         lines = f.readlines()
     params_lists = []
     for line in lines:
