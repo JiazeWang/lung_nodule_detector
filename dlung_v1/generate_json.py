@@ -11,6 +11,7 @@ import pandas
 import csv
 import io
 from config import config
+import json
 
 def sigmoid(x):
   return 1 / (1 + math.exp(-x))
@@ -55,6 +56,44 @@ def duplicate_file(in_filename):
                     byte_string += chr(byte)
             outfile.write(byte_string)
             outfile.close()
+
+def convert_json(input, output, thresholds=0.5):
+    with open(input, "r") as f:
+        lines = f.readlines()
+    NoduleClass, NoduleScore, NoduleCoordinates, NoduleDiameter= [], [], [], []
+    nudule = {}
+    num = 0
+    result = []
+    record = lines[1].split(",")[0]
+    for line in lines[1:]:
+        nodule_dic = {}
+        line = line.rstrip()
+        line = line.split(",")
+        if line[0] == record and num+1<len(lines[1:]) :
+            NoduleScore.append(line[-1])
+            if float(line[-1])> thresholds:
+                NoduleClass.append(1)
+            else:
+                NoduleClass.append(0)
+            NoduleCoordinates.append([line[1], line[2], line[3]])
+            NoduleDiameter.append(line[4])
+        else:
+            nudule = {}
+            patient = {"patientName": record, \
+                       "nodules": nudule,}
+            nudule["NoduleScore"] = NoduleScore
+            nudule["NoduleClass"] = NoduleClass
+            nudule["NoduleCoordinates"] = NoduleCoordinates
+            nudule["NoduleDiameter"] = NoduleDiameter
+            NoduleClass, NoduleScore, NoduleCoordinates, NoduleDiameter = [], [], [], []
+            NoduleScore.append(line[-1])
+            NoduleCoordinates.append([line[1], line[2], line[3]])
+            NoduleDiameter.append(line[4])
+            record = line[0]
+            result.append(patient)
+        num = num + 1
+    with open(output,'w',encoding='utf-8') as f:
+        f.write(json.dumps(result,indent=2))
 
 if __name__ == '__main__':
     pbb = []
@@ -107,3 +146,4 @@ if __name__ == '__main__':
 
     df_annos = pandas.DataFrame(csv_submit, columns=["seriesuid", "coordX", "coordY", "coordZ", "probability"])
     df_annos.to_csv(submit_file, index=False)
+    convert_json('submission.txt', "result.json")
