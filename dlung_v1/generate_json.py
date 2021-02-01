@@ -56,6 +56,19 @@ def duplicate_file(in_filename):
             outfile.close()
 
 def convert_json(input, output, thresholds=0.5):
+    with open("record_folder_series.txt", 'r') as f:
+        lines = f.readlines()
+    patientdic = {}
+    studydic = {}
+    for line in lines:
+        line = line.rstrip()
+        line = line.split("    ")
+        name = line[0]
+        patientname = name.split("/")[1]
+        studyname = name[8:]
+        for i in line[1:]:
+            patientdic[i] = patientname
+            studydic[i] = studyname
     with open(input, "r") as f:
         lines = f.readlines()
     NoduleClass, NoduleScore, NoduleCoordinates, NoduleDiameter= [], [], [], []
@@ -78,8 +91,10 @@ def convert_json(input, output, thresholds=0.5):
             NoduleDiameter.append(line[4])
         else:
             nudule = {}
-            patient = {"patientName": record, \
-                       "nodules": nudule,}
+            series = {"SeriesName": record, \
+                      "PatientID": patientdic[record], \
+                      "StudyId": studydic[record],\
+                      "nodules": nudule,}
             nudule["NoduleScore"] = NoduleScore
             nudule["NoduleClass"] = NoduleClass
             nudule["NoduleCoordinates"] = NoduleCoordinates
@@ -93,7 +108,7 @@ def convert_json(input, output, thresholds=0.5):
             NoduleCoordinates.append([line[1], line[2], line[3]])
             NoduleDiameter.append(line[4])
             record = line[0]
-            result.append(patient)
+            result.append(series)
         num = num + 1
     with open(output,'w',encoding='utf-8') as f:
         f.write(json.dumps(result,indent=2))
