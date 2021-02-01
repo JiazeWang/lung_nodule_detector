@@ -9,4 +9,4 @@ data_config = {
     "result": BASE + "result"
 }
 
-config = dict(data_config, **net_config)
+config = dict(data_config)
