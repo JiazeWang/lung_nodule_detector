@@ -60,6 +60,7 @@ def duplicate_file(in_filename):
 def convert_json(input, output, thresholds=0.5):
     with open(input, "r") as f:
         lines = f.readlines()
+        lines.append("\n")
     NoduleClass, NoduleScore, NoduleCoordinates, NoduleDiameter= [], [], [], []
     nudule = {}
     num = 0
@@ -68,7 +69,6 @@ def convert_json(input, output, thresholds=0.5):
     for line in lines[1:]:
         nodule_dic = {}
         line = line.rstrip()
-        print(line[0])
         line = line.split(",")
         if line[0] == record and num+1<len(lines[1:]):
             NoduleScore.append(line[-1])
