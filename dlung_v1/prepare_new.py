@@ -155,12 +155,13 @@ def apply_mask(image, binary_mask1, binary_mask2, pad_value=170,
 
     return image_new
 
-def savenpy_luna_attribute(inputpath, savepath, savename):
+def savenpy_luna_attribute(params_lists):
+    inputpath, savepath, maskpath = params_lists
     islabel = True
     isClean = True
     resolution = np.array([1, 1, 1])
     sliceim, origin, spacing = load_itk_dicom(inputpath)
-    lung_mask, _, _ = load_itk_image('%s.mhd' % (pid_mask))
+    lung_mask, _, _ = load_itk_image(maskpath)
     ori_sliceim_shape_yx = sliceim.shape[1:3]
     sliceim = lumTrans(sliceim)
     binary_mask1, binary_mask2 = lung_mask == 1, lung_mask == 2
@@ -192,7 +193,8 @@ def main():
         line = line.rstrip()
         savename = '_'.join(line.split("/"))
         npy_savepath = os.path.join(npy_dir, savename)
-        params_lists.append([os.path.join(img_dir, line), npy_savepath])
+        mask_savepath =  os.path.join(lung_mask_dir, savename+'.mhd')
+        params_lists.append([os.path.join(img_dir, line), npy_savepath, mask_savepath])
     pool = Pool(processes=10)
     pool.map(savenpy_luna_attribute, params_lists)
     pool.close()
