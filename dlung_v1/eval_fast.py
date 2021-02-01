@@ -16,7 +16,6 @@ from config import config
 class savefile():
     def __init__(self, filename):
         super(savefile,self).__init__()
-        self.init_openpath = '/research/dept8/jzwang/code/lung_nodule_detector/dlung_v1/npy/'
         self.resolution = np.array([1,1,1])
         self.slice_index = 0
         self.slice_num = 0
@@ -60,19 +59,21 @@ class savefile():
 
         self.world_pbb = UI_util.predict_nodule_v2(self.detect_net, data, coord2, nzhw,
                                self.n_per_run, self.split_comber, self.get_pbb)
-        labels_filename = "result/"+filename+".npy"
+        labels_filename = config["result"]+filename+".npy"
         np.save(labels_filename, self.world_pbb)
 
     def process(self, filename):
         with open(filename, 'r') as f:
             lines = f.readlines()
         num = 0
+        if not os.path.exists(config["result"]):
+            os.makedirs(config["result"])
         for line in lines:
             print("processing %s"%num)
             num = num + 1
             line = line.rstrip()
             line = "_".join(line.split('/'))
-            filedir = self.init_openpath + line + "_clean.npy"
+            filedir =  config["npy_dir"] + line + "_clean.npy"
             #print(line)
             self.detect(filedir, line)
 
