@@ -278,9 +278,9 @@ def train(data_loader, net, loss, epoch, optimizer, get_lr, save_freq, save_dir)
 
     metrics = []
     for i, (data, target, coord) in enumerate(data_loader):
-        data = Variable(data.cuda(async=True))
-        target = Variable(target.cuda(async=True))
-        coord = Variable(coord.cuda(async=True))
+        data = Variable(data.cuda(non_blocking=True))
+        target = Variable(target.cuda(non_blocking=True))
+        coord = Variable(coord.cuda(non_blocking=True))
         output = net(data, coord)
         # print ("output", np.shape(output))
         loss_output = loss(output, target)
@@ -330,9 +330,9 @@ def validate(data_loader, net, loss, best_val_loss, epoch, save_dir):
 
     metrics = []
     for i, (data, target, coord) in enumerate(data_loader):
-        data = Variable(data.cuda(async=True), volatile=True)
-        target = Variable(target.cuda(async=True), volatile=True)
-        coord = Variable(coord.cuda(async=True), volatile=True)
+        data = Variable(data.cuda(non_blocking=True), volatile=True)
+        target = Variable(target.cuda(non_blocking=True), volatile=True)
+        coord = Variable(coord.cuda(non_blocking=True), volatile=True)
 
         output = net(data, coord)
         loss_output = loss(output, target, train=False)
@@ -506,7 +506,7 @@ def singletest(data, net, config, splitfun, combinefun, n_per_run, margin=64):
     z, h, w = data.size(2), data.size(3), data.size(4)
     print(data.size())
     data = splitfun(data, config['max_stride'], margin)
-    data = Variable(data.cuda(async=True), volatile=True, requires_grad=False)
+    data = Variable(data.cuda(non_blocking=True), volatile=True, requires_grad=False)
     splitlist = range(0, args.split + 1, n_per_run)
     outputlist = []
 
@@ -522,4 +522,3 @@ def singletest(data, net, config, splitfun, combinefun, n_per_run, margin=64):
 
 if __name__ == '__main__':
     main()
-

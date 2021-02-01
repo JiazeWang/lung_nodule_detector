@@ -310,7 +310,7 @@ def crop_nodule_arr_2ch(target, img_arr, crop_size = 48):
 
 def predict_attribute(attribute_net, crop_img):
     attribute_net.eval()
-    crop_img = Variable(crop_img.cuda(async=True), volatile=True)
+    crop_img = Variable(crop_img.cuda(non_blocking=True), volatile=True)
     output = attribute_net(crop_img)
     return output
 
