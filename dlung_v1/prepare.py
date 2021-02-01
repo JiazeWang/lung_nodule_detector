@@ -253,6 +253,8 @@ def main():
         os.makedirs(lung_mask_dir)
     if not os.path.exists(npy_dir):
         os.makedirs(npy_dir)
+    if not os.path.exists(mhd_dir):
+        os.makedirs(mhd_dir)
     with open(data_txt, "r") as f:
         lines = f.readlines()
     record_series = []
