@@ -94,6 +94,7 @@ class savefile():
             print("processing %s"%num)
             num = num + 1
             line = line.rstrip()
+            line = "_".join(line.split('/'))
             line = self.init_openpath + line + ".npy"
             #print(line)
             self.opennumpy(line)
