@@ -104,4 +104,4 @@ class savefile():
 
 
 if __name__ == '__main__':
-    savefile(filename="/research/dept8/jzwang/dataset/LUNA16/list.txt")
+    savefile(filename="/research/dept8/jzwang/code/NoduleNet/dlung_v1/data/filedir.txt")
