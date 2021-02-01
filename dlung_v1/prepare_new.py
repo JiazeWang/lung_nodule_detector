@@ -171,8 +171,8 @@ def savenpy_luna_attribute(params_lists):
     sliceim = apply_mask(sliceim, binary_mask1, binary_mask2)
     sliceim1, _ = resample(sliceim, spacing, resolution, order=1)
     sliceim = sliceim1[np.newaxis, ...]
-    np.save((savepath + '_clean.npy'), sliceim)
-    nrrd.write(savepath + '_clean.nrrd'), sliceim)
+    np.save(savepath + '_clean.npy', sliceim)
+    nrrd.write(savepath + '_clean.nrrd', sliceim)
     return 1
 
 def main():
