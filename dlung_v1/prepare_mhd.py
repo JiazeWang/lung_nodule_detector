@@ -225,7 +225,7 @@ def savenpy_luna_attribute(params_lists):
 def main():
     img_dir = config["img_dir"]
     #data_txt = config["data_txt"]
-    data_txt = "/research/dept8/jzwang/dataset/LUNA16/combined.txt"
+    data_txt = "val.csv"
     lung_mask_dir = config["lung_mask_dir"]
     npy_dir = config["npy_dir"]
     if not os.path.exists(lung_mask_dir):
