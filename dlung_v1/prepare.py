@@ -241,12 +241,14 @@ def savenpy_luna_attribute(params_lists):
     sliceim = apply_mask(sliceim, binary_mask1, binary_mask2)
     sliceim1, _ = resample(sliceim, spacing, resolution, order=1)
     seg_img = sliceim1
+    """
     lung_box = get_lung_box(binary_mask, seg_img.shape)
     z_min, z_max = lung_box[0]
     y_min, y_max = lung_box[1]
     x_min, x_max = lung_box[2]
     seg_img = seg_img[z_min:z_max, y_min:y_max, x_min:x_max]
     #sliceim = sliceim1[np.newaxis, ...]
+    """
     np.save(savepath + '_clean.npy', seg_img)
     #nrrd.write(savepath + '_clean.nrrd', seg_img)
     return 1

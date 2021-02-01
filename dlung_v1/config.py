@@ -6,7 +6,7 @@ data_config = {
     "img_dir" : BASE + "data/",
     "data_txt" : BASE + "data/filedir.txt",
     "lung_mask_dir" : BASE + "data/lung_mask/",
-    "npy_dir" : "data/npy/",
+    "npy_dir" :  BASE +  "data/npy/",
     "mhd_dir": BASE + "data/mhd/",
     "result": BASE + "result/",
     "record": "record_series_list.txt",
