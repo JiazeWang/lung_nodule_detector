@@ -7,7 +7,7 @@ data_config = {
     "data_txt" : BASE + "data/filedir.txt",
     "lung_mask_dir" : BASE + "data/lung_mask/",
     "npy_dir" : "data/npy/",
-    "mhd_dir": BASE + "data/mhd/"
-    "result": BASE + "result/"
+    "mhd_dir": BASE + "data/mhd/",
+    "result": BASE + "result/",
 }
 config = dict(data_config)
