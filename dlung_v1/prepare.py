@@ -260,6 +260,7 @@ def main():
     record_series.append(result)
     pool.close()
     pool.join()
+    print(record_series)
     with open("record_series.txt",'w') as f:
         f.write('\n'.join(record_series))
 
