@@ -1,10 +1,10 @@
 import os
-root = []
-dirs = []
+rootrecord = []
+dirrecord = []
 for root,dirs,files in os.walk("CT-Lung/"):
-    root.append(root)
+    rootrecord.append(root)
     for dir in dirs:
         pathnow = os.path.join(root, dir)
-        dirs.append(dirs)
-print("root", root)
-print("dirs", dirs)
+        dirrecord.append(dirs)
+print("root", rootrecord)
+print("dirs", dirrecord)
