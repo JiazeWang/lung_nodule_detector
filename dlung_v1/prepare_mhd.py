@@ -240,7 +240,7 @@ def main():
         line = line.rstrip()
         line = line[0:-4]
         savedir = '_'.join(line.split("/"))
-        get_lung(os.path.join("/research/dept8/jzwang/dataset/LUNA16/combined", line), os.path.join(lung_mask_dir, savedir))
+        get_lung(os.path.join("/research/dept8/jzwang/dataset/LUNA16/combined", line+'.mhd'), os.path.join(lung_mask_dir, savedir))
     params_lists = []
     for line in lines:
         line = line.rstrip()
@@ -248,7 +248,7 @@ def main():
         savename = '_'.join(line.split("/"))
         npy_savepath = os.path.join(npy_dir, savename)
         mask_savepath =  os.path.join(lung_mask_dir, savename+'.mhd')
-        params_lists.append([os.path.join("/research/dept8/jzwang/dataset/LUNA16/combined", line), npy_savepath, mask_savepath])
+        params_lists.append([os.path.join("/research/dept8/jzwang/dataset/LUNA16/combined", line+'.mhd'), npy_savepath, mask_savepath])
     pool = Pool(processes=10)
     pool.map(savenpy_luna_attribute, params_lists)
     pool.close()
