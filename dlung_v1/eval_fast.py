@@ -81,7 +81,7 @@ class savefile():
         img = np.array(self.slice_arr[self.slice_index], dtype=np.uint8)
 
     def opennumpy(self, filedir, filename):
-        self.sliceim_re = np.load(filename)
+        self.sliceim_re = np.load(filedir)
         self.slice_arr = np.zeros((np.shape(self.sliceim_re)[0], np.shape(self.sliceim_re)[1], np.shape(self.sliceim_re)[2], 3))
         self.slice_num = np.shape(self.sliceim_re)[0]
         self.slice_height = np.shape(self.sliceim_re)[1]
@@ -93,7 +93,7 @@ class savefile():
 
         self.world_pbb = UI_util.predict_nodule_v2(self.detect_net, data, coord2, nzhw,
                                self.n_per_run, self.split_comber, self.get_pbb)
-        labels_filename = "result/"+filenames+".npy"
+        labels_filename = "result/"+filename+".npy"
         np.save(labels_filename, self.world_pbb)
 
     def process(self, filename):
