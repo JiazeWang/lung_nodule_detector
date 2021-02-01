@@ -102,10 +102,22 @@ def load_itk_image(filename):
     return numpyImage, numpyOrigin, numpySpacing
 
 def load_itk_dicom(filename):
-    """Return img array and [z,y,x]-ordered origin and spacing
-    """
     reader = sitk.ImageSeriesReader()
     dcm_series = reader.GetGDCMSeriesFileNames(filename)
+    reader.SetFileNames(dcm_series)
+    img = reader.Execute()
+    numpyImage = sitk.GetArrayFromImage(img)
+    numpyOrigin = np.array(list(reversed(img.GetOrigin())))
+    numpySpacing = np.array(list(reversed(img.GetSpacing())))
+    return numpyImage, numpyOrigin, numpySpacing
+
+
+def load_itk_series(filename):
+    reader = sitk.ImageSeriesReader()
+    seriesIDs = reader.GetGDCMSeriesIDs(filename)
+    print("seriesIDs:", seriesIDs)
+    print("len seriesIDs:", len(seriesIDs))
+    dcm_series = reader.GetGDCMSeriesFileNames(filename, seriesIDs[0])
     reader.SetFileNames(dcm_series)
     img = reader.Execute()
     numpyImage = sitk.GetArrayFromImage(img)
@@ -238,6 +250,12 @@ def main():
         lines = f.readlines()
     params_lists = []
     for line in lines:
+        #print("lung segmentation:", line)
+        line = line.rstrip()
+        savedir = '_'.join(line.split("/"))
+        numpyImage, numpyOrigin, numpySpacing = load_itk_dicom(os.path.join(img_dir, line))
+    """
+    for line in lines:
         print("lung segmentation:", line)
         line = line.rstrip()
         savedir = '_'.join(line.split("/"))
@@ -253,6 +271,7 @@ def main():
     pool.map(savenpy_luna_attribute, params_lists)
     pool.close()
     pool.join()
+    """
 
 if __name__=='__main__':
     main()
