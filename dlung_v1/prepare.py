@@ -119,7 +119,9 @@ def load_itk_dicom(filename):
     return numpyImage, numpyOrigin, numpySpacing
 
 
-def load_itk_series(filename):
+def load_itk_series(filedir):
+    img_dir = config["img_dir"]
+    filename = os.path.join(img_dir, filedir)
     reader = sitk.ImageSeriesReader()
     seriesIDs = reader.GetGDCMSeriesIDs(filename)
     seriesIDsnew = []
@@ -269,7 +271,7 @@ def main():
     for line in lines:
         line = line.rstrip()
         savedir = '_'.join(line.split("/"))
-        params_lists.append(os.path.join(img_dir, line))
+        params_lists.append(line)
     pool = Pool(processes=10)
     result = pool.map(load_itk_series, params_lists)
     for item in result:
