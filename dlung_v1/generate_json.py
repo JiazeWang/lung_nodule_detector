@@ -105,7 +105,7 @@ if __name__ == '__main__':
     filename_dict = {}
     csv_submit = []
     csv_sid = []
-    with open(config["record"], 'r') as f:
+    with open("record_test.txt", 'r') as f:
         lines = f.readlines()
     num = 0
     if not os.path.exists(config["result"]):
@@ -114,36 +114,35 @@ if __name__ == '__main__':
         print("processing %s"%i)
         line = lines[i].rstrip()
         if os.path.exists(config["result"] + line + ".npy"):
-            pbbdir =  np.load(config["result"] + line + ".npy")
-            origin_dir = np.load(config["npy_dir"] + line + "_origin.npy")
-            spacing_dir = np.load(config["npy_dir"] + line + "_spacing.npy")
-            pbb_item = pbbdir
-            filename_dict[i] = str(line)
-            print("pbb_item.shape:", pbb_item.shape)
-            pbb_item = pbb_item[pbb_item[:, 0].argsort()[::-1]]
-            pbb_append_list = []
-            for item in pbb_item:
-                if sigmoid(item[0]) < 0.1:
-                    continue
-                is_overlap = False
-                for appended in pbb_append_list:
-                    minimum_dist = 3
-                    dist = math.sqrt(
-                        math.pow(appended[0] - item[0], 2) + math.pow(appended[1] - item[1], 2) + math.pow(
-                            appended[2] - item[2], 2))
-                    if (dist < minimum_dist):
-                        is_overlap = True
-                        break;
-                if not is_overlap:
-                    pbb_append_list.append(item)
-            pbb.append(np.array(pbb_append_list))
+        pbbdir =  np.load(config["result"] + line + ".npy")
+        origin_dir = np.load(config["npy_dir"] + line + "_origin.npy")
+        spacing_dir = np.load(config["npy_dir"] + line + "_spacing.npy")
+        pbb_item = pbbdir
+        filename_dict[i] = str(line)
+        pbb_item = pbb_item[pbb_item[:, 0].argsort()[::-1]]
+        pbb_append_list = []
+        for item in pbb_item:
+            if sigmoid(item[0]) < 0.1:
+                continue
+            is_overlap = False
+            for appended in pbb_append_list:
+                minimum_dist = 3
+                dist = math.sqrt(
+                    math.pow(appended[0] - item[0], 2) + math.pow(appended[1] - item[1], 2) + math.pow(
+                        appended[2] - item[2], 2))
+                if (dist < minimum_dist):
+                    is_overlap = True
+                    break;
+            if not is_overlap:
+                pbb_append_list.append(item)
+        pbb.append(np.array(pbb_append_list))
     pbb = np.array(pbb)
     conf_th = 0.1
     nms_th = 0.3
     detect_th  = 0.3
     for i in range(len(pbb)):
         nms_pbb = nms(pbb[i], nms_th)
-        world_pbb = convert_worldcoord(i, nms_pbb, config["npy_dir"]+filename_dict[i])
+        world_pbb = convert_worldcoord(i, nms_pbb, filename_dict[i])
         s_id = filename_dict[i]
         for candidate in world_pbb:
             csv_submit.append([s_id, candidate[1], candidate[2], candidate[3], candidate[4], candidate[0]])
