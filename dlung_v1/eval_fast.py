@@ -95,7 +95,7 @@ class savefile():
             num = num + 1
             line = line.rstrip()
             line = "_".join(line.split('/'))
-            line = self.init_openpath + line + ".npy"
+            line = self.init_openpath + line + "_clean.npy"
             #print(line)
             self.opennumpy(line)
             self.detect()
