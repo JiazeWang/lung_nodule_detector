@@ -117,13 +117,14 @@ def load_itk_series(filename):
     seriesIDs = reader.GetGDCMSeriesIDs(filename)
     print("seriesIDs:", seriesIDs)
     print("len seriesIDs:", len(seriesIDs))
-    dcm_series = reader.GetGDCMSeriesFileNames(filename, seriesIDs[0])
-    reader.SetFileNames(dcm_series)
-    img = reader.Execute()
-    numpyImage = sitk.GetArrayFromImage(img)
-    numpyOrigin = np.array(list(reversed(img.GetOrigin())))
-    numpySpacing = np.array(list(reversed(img.GetSpacing())))
-    return numpyImage, numpyOrigin, numpySpacing
+    for i in range(0, len(seriesIDs))
+        dcm_series = reader.GetGDCMSeriesFileNames(filename, seriesIDs[i])
+        reader.SetFileNames(dcm_series)
+        img = reader.Execute()
+        numpyImage = sitk.GetArrayFromImage(img)
+        output = seriesIDs[i]+'.mhd'
+        sitk.WriteImage(result_out, output)
+    return 1
 
 def lumTrans(image, HU_min=-1200.0, HU_max=600.0, HU_nan=-2000.0):
     """
@@ -254,6 +255,7 @@ def main():
         line = line.rstrip()
         savedir = '_'.join(line.split("/"))
         numpyImage, numpyOrigin, numpySpacing = load_itk_series(os.path.join(img_dir, line))
+
     """
     for line in lines:
         print("lung segmentation:", line)
