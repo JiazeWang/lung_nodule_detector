@@ -128,7 +128,7 @@ def load_itk_series(filename):
         reader.SetFileNames(dcm_series)
         img = reader.Execute()
         #numpyImage = sitk.GetArrayFromImage(img)
-        output = os.path.join(config["mhd_dir"], seriesIDs[i]+'.mhd')
+        output = os.path.join(mhd_dir, seriesIDs[i]+'.mhd')
         sitk.WriteImage(img, output)
     return filename+"    "+"    ".join(seriesIDs)
 
@@ -249,12 +249,13 @@ def main():
     data_txt = config["data_txt"]
     lung_mask_dir = config["lung_mask_dir"]
     npy_dir = config["npy_dir"]
+    mhd_dir = config['mhd_dir']
     if not os.path.exists(lung_mask_dir):
         os.makedirs(lung_mask_dir)
     if not os.path.exists(npy_dir):
         os.makedirs(npy_dir)
     if not os.path.exists(mhd_dir):
-        os.makedirs(config['mhd_dir'])
+        os.makedirs(mhd_dir)
     with open(data_txt, "r") as f:
         lines = f.readlines()
     record_series = []
@@ -286,7 +287,7 @@ def main():
         print("lung segmentation:", line)
         line = line.rstrip()
         savedir = line
-        get_lung_mhd(os.path.join(config["mhd_dir"], line+'mhd'), os.path.join(lung_mask_dir, line))
+        get_lung_mhd(os.path.join(mhd_dir, line+'mhd'), os.path.join(lung_mask_dir, line))
 
     params_lists = []
     for line in record_name:
