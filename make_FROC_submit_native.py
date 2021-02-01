@@ -50,6 +50,7 @@ def load_itk_image(filename):
 
     return numpyImage, numpyOrigin, numpySpacing, isflip
 
+
 def convert_worldcoord(idx, pbb, filename_dict):
     sliceim, origin, spacing, isflip = load_itk_image(os.path.join(luna_data, filename_dict[idx] + '.mhd'))
     #Mask, extendbox = Mask_info(idx, filename_dict)
@@ -158,6 +159,3 @@ if __name__ == '__main__':
 
     df_annos = pandas.DataFrame(csv_sid)
     df_annos.to_csv(sid, index=False, header=False)
-
-
-
