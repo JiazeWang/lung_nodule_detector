@@ -116,7 +116,7 @@ def load_itk_series(filename):
     reader = sitk.ImageSeriesReader()
     seriesIDs = reader.GetGDCMSeriesIDs(filename)
     for i in range(0, len(seriesIDs)):
-        print("processing %s"%seriesIDs[i]))
+        print("processing %s"%seriesIDs[i])
         dcm_series = reader.GetGDCMSeriesFileNames(filename, seriesIDs[i])
         reader.SetFileNames(dcm_series)
         img = reader.Execute()
