@@ -195,6 +195,8 @@ def main():
         npy_savepath = os.path.join(npy_dir, savename)
         mask_savepath =  os.path.join(lung_mask_dir, savename+'.mhd')
         params_lists.append([os.path.join(img_dir, line), npy_savepath, mask_savepath])
+    for line in params_lists:
+        savenpy_luna_attribute(line)
     pool = Pool(processes=10)
     pool.map(savenpy_luna_attribute, params_lists)
     pool.close()
