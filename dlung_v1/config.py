@@ -8,5 +8,4 @@ data_config = {
     "npy_dir" : "data/npy",
     "result": BASE + "result"
 }
-
 config = dict(data_config)

@@ -234,7 +234,7 @@ def main():
         os.makedirs(lung_mask_dir)
     if not os.path.exists(npy_dir):
         os.makedirs(npy_dir)
-    with open("data_txt", "r") as f:
+    with open(data_txt, "r") as f:
         lines = f.readlines()
     params_lists = []
     for line in lines:
