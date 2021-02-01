@@ -83,9 +83,18 @@ class savefile():
     def opennumpy(self, filename):
         self.sliceim_re = np.load(filename)
         self.slice_arr = np.zeros((np.shape(self.sliceim_re)[0], np.shape(self.sliceim_re)[1], np.shape(self.sliceim_re)[2], 3))
-        for i in range(len(self.sliceim_re)):
-            self.slice_arr[i] = cv2.cvtColor(self.sliceim_re[i], 8)
-        print("self.slice_arr.shape:", self.slice_arr.shape)
+        self.slice_num = np.shape(self.sliceim_re)[0]
+        self.slice_height = np.shape(self.sliceim_re)[1]
+        self.slice_width = np.shape(self.sliceim_re)[2]
+        if (self.slice_num <= 0):
+            return 0
+        data, coord2, nzhw = UI_util.split_data(np.expand_dims(self.sliceim_re, axis=0),
+                                                self.stride, self.split_comber)
+
+        self.world_pbb = UI_util.predict_nodule_v2(self.detect_net, data, coord2, nzhw,
+                               self.n_per_run, self.split_comber, self.get_pbb)
+        labels_filename = "result/"+self.pt_num+".npy"
+        np.save(labels_filename, self.world_pbb)
 
     def process(self, filename):
         with open(filename, 'r') as f:
