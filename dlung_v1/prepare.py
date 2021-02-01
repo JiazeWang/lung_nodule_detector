@@ -272,7 +272,7 @@ def main():
         for i in range(1, len(line)):
             record_name.append(line[i])
     with open("record_series_list.txt",'w') as f:
-        f.write('\n'.join(record_series))
+        f.write('\n'.join(record_name))
 
 
     """
