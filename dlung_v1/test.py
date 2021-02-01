@@ -76,8 +76,5 @@ class savefile():
             filedir =  config["npy_dir"] + line + "_clean.npy"
             self.detect(filedir, line)
 
-
-
-
 if __name__ == '__main__':
-    savefile(filename=config["data_txt"])
+    savefile(filename="record_series_list.txt")

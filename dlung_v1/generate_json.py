@@ -14,7 +14,7 @@ import json
 
 def sigmoid(x):
   return 1 / (1 + math.exp(-x))
-  
+
 def convert_worldcoord(idx, pbb, filename):
     origin = np.load(filename+'_origin.npy')
     spacing = np.load(filename+'_spacing.npy')
@@ -149,4 +149,4 @@ if __name__ == '__main__':
 
     df_annos = pandas.DataFrame(csv_submit, columns=["seriesuid", "coordX", "coordY", "coordZ", "size", "probability"])
     df_annos.to_csv(submit_file, index=False)
-    convert_json('submission.txt', "result.json")
+    #convert_json('submission.txt', "result.json")
