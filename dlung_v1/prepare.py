@@ -122,15 +122,20 @@ def load_itk_dicom(filename):
 def load_itk_series(filename):
     reader = sitk.ImageSeriesReader()
     seriesIDs = reader.GetGDCMSeriesIDs(filename)
+    seriesIDsnew = []
     for i in range(0, len(seriesIDs)):
         print("processing %s"%seriesIDs[i])
         dcm_series = reader.GetGDCMSeriesFileNames(filename, seriesIDs[i])
         reader.SetFileNames(dcm_series)
         img = reader.Execute()
-        #numpyImage = sitk.GetArrayFromImage(img)
-        output = os.path.join(config["mhd_dir"], seriesIDs[i]+'.mhd')
-        sitk.WriteImage(img, output)
-    return filename+"    "+"    ".join(seriesIDs)
+        numpyImage = sitk.GetArrayFromImage(img)
+        if numpyImage.shape[0]==2:
+            continue
+        else:
+            seriesIDsnew.append(seriesIDs[i])
+            output = os.path.join(config["mhd_dir"], seriesIDs[i]+'.mhd')
+            sitk.WriteImage(img, output)
+    return filename+"    "+"    ".join(seriesIDsnew)
 
 def lumTrans(image, HU_min=-1200.0, HU_max=600.0, HU_nan=-2000.0):
     """
