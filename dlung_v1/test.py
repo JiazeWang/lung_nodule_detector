@@ -62,7 +62,8 @@ class savefile():
         labels_filename = config["result"]+filename+".npy"
         if self.world_pbb.shape[0]!=0:
             np.save(labels_filename, self.world_pbb)
-            return filename
+            return 1
+        return 0
 
     def process(self, filename):
         with open(filename, 'r') as f:
@@ -75,9 +76,9 @@ class savefile():
             print("processing %s"%num)
             num = num + 1
             line = line.rstrip()
-            line = "_".join(line.split('/'))
             filedir =  config["npy_dir"] + line + "_clean.npy"
-            namenew.append(self.detect(filedir, line))
+            if self.detect(filedir, line):
+                namenew.append(line)
         with open("record_test.txt",'w') as f:
             f.write('\n'.join(namenew))
 
