@@ -203,13 +203,13 @@ def predict_nodule(net, data, coord, nzhw, lbb, n_per_run, split_comber, get_pbb
     # print (lbb)
     world_pbb = convert_prob(pbb_cand_list_nms)
     # print (world_pbb)
-    print("label", len(lbb))
-    print("z_pos   y_pos   x_pos   size")
+    #print("label", len(lbb))
+    #print("z_pos   y_pos   x_pos   size")
     for i in range(len(lbb)):
         for j in range(len(lbb[i])):
             print(round(lbb[i][j], 2), end='\t')
         print()
-    print("candidate", len(world_pbb))
+    #print("candidate", len(world_pbb))
     print("prob    z_pos   y_pos   x_pos   size")
     for i in range(len(world_pbb)):
         for j in range(len(world_pbb[i])):
