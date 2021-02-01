@@ -105,7 +105,7 @@ if __name__ == '__main__':
     filename_dict = {}
     csv_submit = []
     csv_sid = []
-    with open(config["data_txt"], 'r') as f:
+    with open(config["record"], 'r') as f:
         lines = f.readlines()
     num = 0
     if not os.path.exists(config["result"]):
@@ -113,7 +113,6 @@ if __name__ == '__main__':
     for i in range(len(lines)):
         print("processing %s"%i)
         line = lines[i].rstrip()
-        line = "_".join(line.split('/'))
         pbbdir =  np.load(config["result"] + line + ".npy")
         origin_dir = np.load(config["npy_dir"] + line + "_origin.npy")
         spacing_dir = np.load(config["npy_dir"] + line + "_spacing.npy")
@@ -149,4 +148,4 @@ if __name__ == '__main__':
 
     df_annos = pandas.DataFrame(csv_submit, columns=["seriesuid", "coordX", "coordY", "coordZ", "size", "probability"])
     df_annos.to_csv(submit_file, index=False)
-    #convert_json('submission.txt', "result.json")
+    convert_json('submission.txt', "result.json")

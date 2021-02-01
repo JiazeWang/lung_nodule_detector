@@ -1,7 +1,7 @@
 import os
 
 # we need to change base only.Then put the data under BASE/data/sample
-BASE = '/research/dept8/jzwang/code/lung_nodule_detector/dlung_v1/' # make sure we have the ending '/'
+BASE = os.path.realpath(__file__)  # assume the BASE dir is 'data'  ' # make sure we have the ending '/'
 data_config = {
     "img_dir" : BASE + "data/",
     "data_txt" : BASE + "data/filedir.txt",
@@ -9,5 +9,6 @@ data_config = {
     "npy_dir" : "data/npy/",
     "mhd_dir": BASE + "data/mhd/",
     "result": BASE + "result/",
+    "record": "record_series_list.txt",
 }
 config = dict(data_config)

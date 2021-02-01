@@ -77,4 +77,4 @@ class savefile():
             self.detect(filedir, line)
 
 if __name__ == '__main__':
-    savefile(filename="record_series_list.txt")
+    savefile(filename=config["record"])
