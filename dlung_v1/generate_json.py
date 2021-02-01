@@ -141,7 +141,7 @@ if __name__ == '__main__':
     detect_th  = 0.3
     for i in range(len(pbb)):
         nms_pbb = nms(pbb[i], nms_th)
-        world_pbb = convert_worldcoord(i, nms_pbb, filename_dict[i])
+        world_pbb = convert_worldcoord(i, nms_pbb, config["npy_dir"]+filename_dict[i])
         s_id = filename_dict[i]
         for candidate in world_pbb:
             csv_submit.append([s_id, candidate[1], candidate[2], candidate[3], candidate[4], candidate[0]])
