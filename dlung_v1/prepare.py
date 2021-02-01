@@ -287,7 +287,7 @@ def main():
         print("lung segmentation:", line)
         line = line.rstrip()
         savedir = line
-        get_lung_mhd(os.path.join(mhd_dir, line+'mhd'), os.path.join(lung_mask_dir, line))
+        get_lung_mhd(os.path.join(mhd_dir, line+'.mhd'), os.path.join(lung_mask_dir, line))
 
     params_lists = []
     for line in record_name:
