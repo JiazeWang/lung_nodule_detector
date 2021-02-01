@@ -26,13 +26,6 @@ def get_lung(filename, output):
     output = output+'.mhd'
     sitk.WriteImage(result_out, output)
 
-def get_lung_mhd(filename, output):
-    img = sitk.ReadImage(filename)
-    segmentation = mask.apply(img)
-    result_out= sitk.GetImageFromArray(segmentation)
-    output = output+'.mhd'
-    sitk.WriteImage(result_out, output)
-
 def resample(image, spacing, new_spacing=[1.0, 1.0, 1.0], order=1):
     """
     Resample image from the original spacing to new_spacing, e.g. 1x1x1
@@ -109,6 +102,8 @@ def load_itk_image(filename):
     return numpyImage, numpyOrigin, numpySpacing
 
 def load_itk_dicom(filename):
+    """Return img array and [z,y,x]-ordered origin and spacing
+    """
     reader = sitk.ImageSeriesReader()
     dcm_series = reader.GetGDCMSeriesFileNames(filename)
     reader.SetFileNames(dcm_series)
@@ -117,27 +112,6 @@ def load_itk_dicom(filename):
     numpyOrigin = np.array(list(reversed(img.GetOrigin())))
     numpySpacing = np.array(list(reversed(img.GetSpacing())))
     return numpyImage, numpyOrigin, numpySpacing
-
-
-def load_itk_series(filedir):
-    img_dir = config["img_dir"]
-    filename = os.path.join(img_dir, filedir)
-    reader = sitk.ImageSeriesReader()
-    seriesIDs = reader.GetGDCMSeriesIDs(filename)
-    seriesIDsnew = []
-    for i in range(0, len(seriesIDs)):
-        print("processing %s"%seriesIDs[i])
-        dcm_series = reader.GetGDCMSeriesFileNames(filename, seriesIDs[i])
-        reader.SetFileNames(dcm_series)
-        img = reader.Execute()
-        numpyImage = sitk.GetArrayFromImage(img)
-        if numpyImage.shape[0]<=10:
-            continue
-        else:
-            seriesIDsnew.append(seriesIDs[i])
-            output = os.path.join(config["mhd_dir"], seriesIDs[i]+'.mhd')
-            sitk.WriteImage(img, output)
-    return filedir+"    "+"    ".join(seriesIDsnew)
 
 def lumTrans(image, HU_min=-1200.0, HU_max=600.0, HU_nan=-2000.0):
     """
@@ -230,7 +204,7 @@ def savenpy_luna_attribute(params_lists):
     islabel = True
     isClean = True
     resolution = np.array([1, 1, 1])
-    sliceim, origin, spacing = load_itk_image(inputpath)
+    sliceim, origin, spacing = load_itk_dicom(inputpath)
     lung_mask, _, _ = load_itk_image(maskpath)
     np.save(savepath + '_origin.npy', origin)
     np.save(savepath + '_spacing.npy', spacing)
@@ -256,56 +230,29 @@ def main():
     data_txt = config["data_txt"]
     lung_mask_dir = config["lung_mask_dir"]
     npy_dir = config["npy_dir"]
-    mhd_dir = config['mhd_dir']
     if not os.path.exists(lung_mask_dir):
         os.makedirs(lung_mask_dir)
     if not os.path.exists(npy_dir):
         os.makedirs(npy_dir)
-    if not os.path.exists(mhd_dir):
-        os.makedirs(mhd_dir)
     with open(data_txt, "r") as f:
         lines = f.readlines()
-    record_series = []
-    record = []
+    params_lists = []
+    for line in lines:
+        print("lung segmentation:", line)
+        line = line.rstrip()
+        savedir = '_'.join(line.split("/"))
+        get_lung(os.path.join("/research/dept8/jzwang/dataset/LUNA16/combined", line), os.path.join(lung_mask_dir, savedir))
     params_lists = []
     for line in lines:
         line = line.rstrip()
-        savedir = '_'.join(line.split("/"))
-        params_lists.append(line)
-    pool = Pool(processes=10)
-    result = pool.map(load_itk_series, params_lists)
-    for item in result:
-        record_series.append(item)
-    pool.close()
-    pool.join()
-    print(record_series)
-    with open("record_folder_series.txt",'w') as f:
-        f.write('\n'.join(record_series))
-
-    record_name = []
-    for line in record_series:
-        line = line.rstrip()
-        line = line.split('    ')
-        for i in range(1, len(line)):
-            record_name.append(line[i])
-    with open("record_series_list.txt",'w') as f:
-        f.write('\n'.join(record_name))
-    for line in record_name:
-        print("lung segmentation:", line)
-        line = line.rstrip()
-        savedir = line
-        get_lung_mhd(os.path.join(mhd_dir, line+'.mhd'), os.path.join(lung_mask_dir, line))
-    params_lists = []
-    for line in record_name:
-        print(line)
-        line = line.rstrip()
-        savename = line
+        savename = '_'.join(line.split("/"))
         npy_savepath = os.path.join(npy_dir, savename)
         mask_savepath =  os.path.join(lung_mask_dir, savename+'.mhd')
-        params_lists.append([os.path.join(mhd_dir, line+'.mhd'), npy_savepath, mask_savepath])
+        params_lists.append([os.path.join("/research/dept8/jzwang/dataset/LUNA16/combined", line), npy_savepath, mask_savepath])
     pool = Pool(processes=10)
     pool.map(savenpy_luna_attribute, params_lists)
     pool.close()
     pool.join()
+
 if __name__=='__main__':
     main()
