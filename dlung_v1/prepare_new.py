@@ -1,8 +1,10 @@
 import os
 import shutil
 import numpy as np
-from scipy.ndimage.interpolation import zoom
 import SimpleITK as sitk
+import scipy.ndimage
+from scipy.ndimage.measurements import label
+from scipy.ndimage.interpolation import zoom
 from scipy.ndimage.morphology import binary_dilation,generate_binary_structure
 from skimage.morphology import convex_hull_image
 from skimage import measure, morphology
