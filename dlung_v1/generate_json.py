@@ -117,7 +117,7 @@ if __name__ == '__main__':
         origin_dir = np.load(config["npy_dir"] + line + "_origin.npy")
         spacing_dir = np.load(config["npy_dir"] + line + "_spacing.npy")
         pbb_item = pbbdir
-        filename_dict[i] = config["npy_dir"] + str(line)
+        filename_dict[i] = str(line)
         pbb_item = pbb_item[pbb_item[:, 0].argsort()[::-1]]
         pbb_append_list = []
         for item in pbb_item:
