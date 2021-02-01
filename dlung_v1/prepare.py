@@ -115,16 +115,15 @@ def load_itk_dicom(filename):
 def load_itk_series(filename):
     reader = sitk.ImageSeriesReader()
     seriesIDs = reader.GetGDCMSeriesIDs(filename)
-    print("seriesIDs:", seriesIDs)
-    print("len seriesIDs:", len(seriesIDs))
-    for i in range(0, len(seriesIDs))
+    for i in range(0, len(seriesIDs)):
+        print("processing %s"%seriesIDs[i]))
         dcm_series = reader.GetGDCMSeriesFileNames(filename, seriesIDs[i])
         reader.SetFileNames(dcm_series)
         img = reader.Execute()
         numpyImage = sitk.GetArrayFromImage(img)
-        output = seriesIDs[i]+'.mhd'
-        sitk.WriteImage(result_out, output)
-    return 1
+        output = os.path.join(config["npy_dir"], seriesIDs[i]+'.mhd')
+        sitk.WriteImage(numpyImage, output)
+    return [filename, seriesIDs]
 
 def lumTrans(image, HU_min=-1200.0, HU_max=600.0, HU_nan=-2000.0):
     """
@@ -249,12 +248,14 @@ def main():
         os.makedirs(npy_dir)
     with open(data_txt, "r") as f:
         lines = f.readlines()
-    params_lists = []
+    record_series = []
+    record = []
     for line in lines:
-        #print("lung segmentation:", line)
         line = line.rstrip()
         savedir = '_'.join(line.split("/"))
-        numpyImage, numpyOrigin, numpySpacing = load_itk_series(os.path.join(img_dir, line))
+        record_series.append(load_itk_series(os.path.join(img_dir, line)))
+    with open("record_series.txt",'w') as f:
+        f.write('\n'.join(record_series))
 
     """
     for line in lines:
