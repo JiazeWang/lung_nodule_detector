@@ -253,7 +253,7 @@ def main():
         #print("lung segmentation:", line)
         line = line.rstrip()
         savedir = '_'.join(line.split("/"))
-        numpyImage, numpyOrigin, numpySpacing = load_itk_dicom(os.path.join(img_dir, line))
+        numpyImage, numpyOrigin, numpySpacing = load_itk_series(os.path.join(img_dir, line))
     """
     for line in lines:
         print("lung segmentation:", line)
