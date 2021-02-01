@@ -79,7 +79,7 @@ class savefile():
             filedir =  config["npy_dir"] + line + "_clean.npy"
             namenew.append(self.detect(filedir, line))
         with open("record_test.txt",'w') as f:
-            f.write('\n'.join(record_name))
+            f.write('\n'.join(namenew))
 
 if __name__ == '__main__':
     savefile(filename=config["record"])
