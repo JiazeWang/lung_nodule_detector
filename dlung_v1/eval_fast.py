@@ -74,7 +74,6 @@ class savefile():
             line = line.rstrip()
             line = "_".join(line.split('/'))
             filedir =  config["npy_dir"] + line + "_clean.npy"
-            #print(line)
             self.detect(filedir, line)
 
 

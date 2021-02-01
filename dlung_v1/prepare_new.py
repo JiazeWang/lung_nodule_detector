@@ -201,6 +201,7 @@ def apply_mask(image, binary_mask1, binary_mask2, pad_value=170,
 
 def savenpy_luna_attribute(params_lists):
     inputpath, savepath, maskpath = params_lists
+    print("Save %s to numpy"%inputpath)
     islabel = True
     isClean = True
     resolution = np.array([1, 1, 1])
