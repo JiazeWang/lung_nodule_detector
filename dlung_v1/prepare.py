@@ -122,7 +122,7 @@ def load_itk_series(filename):
         img = reader.Execute()
         #numpyImage = sitk.GetArrayFromImage(img)
         output = os.path.join(config["npy_dir"], seriesIDs[i]+'.mhd')
-        sitk.WriteImage(numpyImage, img)
+        sitk.WriteImage(img, output)
     return [filename, seriesIDs]
 
 def lumTrans(image, HU_min=-1200.0, HU_max=600.0, HU_nan=-2000.0):
