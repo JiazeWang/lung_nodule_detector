@@ -1,6 +1,5 @@
 import numpy as np
 import sys
-
 from layers import nms, iou, acc
 import time
 import multiprocessing as mp
