@@ -1,7 +1,7 @@
 import os
 
 # we need to change base only.Then put the data under BASE/data/sample
-BASE = os.path.realpath(__file__)  # assume the BASE dir is 'data'  ' # make sure we have the ending '/'
+BASE = os.path.realpath(__file__)[:-9]  # assume the BASE dir is 'data'  ' # make sure we have the ending '/'
 data_config = {
     "img_dir" : BASE + "data/",
     "data_txt" : BASE + "data/filedir.txt",
