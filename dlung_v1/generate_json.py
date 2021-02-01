@@ -17,10 +17,8 @@ def sigmoid(x):
 
 
 def convert_worldcoord(idx, pbb, filename):
-    sliceim = np.load(filename+'_clean.npy')
     origin = np.load(filename+'_origin.npy')
     spacing = np.load(filename+'_spacing.npy')
-    ori_sliceim_shape_yx = sliceim.shape[1:3]
     for label in pbb:
         pos_ori = label[1:4]
         radious_ori = label[4]
