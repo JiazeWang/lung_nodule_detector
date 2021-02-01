@@ -17,10 +17,7 @@ from multiprocessing import Pool
 from config import config
 
 def get_lung(filename, output):
-    reader = sitk.ImageSeriesReader()
-    dcm_series = reader.GetGDCMSeriesFileNames(filename)
-    reader.SetFileNames(dcm_series)
-    img = reader.Execute()
+    img = sitk.ReadImage(filename)
     segmentation = mask.apply(img)
     result_out= sitk.GetImageFromArray(segmentation)
     output = output+'.mhd'
@@ -204,7 +201,7 @@ def savenpy_luna_attribute(params_lists):
     islabel = True
     isClean = True
     resolution = np.array([1, 1, 1])
-    sliceim, origin, spacing = load_itk_dicom(inputpath)
+    sliceim, origin, spacing = load_itk_image(inputpath)
     lung_mask, _, _ = load_itk_image(maskpath)
     np.save(savepath + '_origin.npy', origin)
     np.save(savepath + '_spacing.npy', spacing)
@@ -227,7 +224,8 @@ def savenpy_luna_attribute(params_lists):
 
 def main():
     img_dir = config["img_dir"]
-    data_txt = config["data_txt"]
+    #data_txt = config["data_txt"]
+    data_txt = "/research/dept8/jzwang/dataset/LUNA16/combined.txt"
     lung_mask_dir = config["lung_mask_dir"]
     npy_dir = config["npy_dir"]
     if not os.path.exists(lung_mask_dir):
