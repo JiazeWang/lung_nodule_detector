@@ -202,14 +202,14 @@ def savenpy_luna_attribute(params_lists):
     isClean = True
     resolution = np.array([1, 1, 1])
     sliceim, origin, spacing = load_itk_image(inputpath)
-    #lung_mask, _, _ = load_itk_image(maskpath)
+    lung_mask, _, _ = load_itk_image(maskpath)
     np.save(savepath + '_origin.npy', origin)
     np.save(savepath + '_spacing.npy', spacing)
-    #binary_mask1, binary_mask2 = lung_mask == 1, lung_mask == 2
-    #binary_mask = binary_mask1 + binary_mask2
+    binary_mask1, binary_mask2 = lung_mask == 1, lung_mask == 2
+    binary_mask = binary_mask1 + binary_mask2
     ori_sliceim_shape_yx = sliceim.shape[1:3]
     sliceim = lumTrans(sliceim)
-    #sliceim = apply_mask(sliceim, binary_mask1, binary_mask2)
+    sliceim = apply_mask(sliceim, binary_mask1, binary_mask2)
     sliceim1, _ = resample(sliceim, spacing, resolution, order=1)
     #seg_img = sliceim1
     sliceim = sliceim1[np.newaxis, ...]
@@ -248,14 +248,13 @@ def main():
     with open(data_txt, "r") as f:
         lines = f.readlines()
     params_lists = []
-    """
+
     for line in lines:
         print("lung segmentation:", line)
         line = line.rstrip()
         line = line[0:-4]
-        savedir = '_'.join(line.split("/"))
-        get_lung(os.path.join("/research/dept8/jzwang/dataset/LUNA16/combined", line+'.mhd'), os.path.join(lung_mask_dir, savedir))
-    """
+        get_lung(os.path.join("/data/ssd/public/jzwang/tianchi_luna", line+'.mhd'), os.path.join(lung_mask_dir, savedir))
+
     annos = np.array(pandas.read_csv("../labels/annotations_three_all.csv"))
     params_lists = []
     for line in lines:
