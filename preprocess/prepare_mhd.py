@@ -253,6 +253,7 @@ def main():
         print("lung segmentation:", line)
         line = line.rstrip()
         line = line[0:-4]
+        savedir = line 
         get_lung(os.path.join("/data/ssd/public/jzwang/tianchi_luna", line+'.mhd'), os.path.join(lung_mask_dir, savedir))
 
     annos = np.array(pandas.read_csv("../labels/annotations_three_all.csv"))
