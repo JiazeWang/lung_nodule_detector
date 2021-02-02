@@ -221,8 +221,6 @@ def savenpy_luna_attribute(params_lists):
     if len(this_annos) > 0:
         for c in this_annos:
             pos = worldToVoxelCoord(c[1:4][::-1], origin=origin, spacing=spacing)
-            if isflip:
-                pos[1:] = ori_sliceim_shape_yx - pos[1:]
             label.append(np.concatenate([pos, [c[4] / spacing[1]]]))
 
     label = np.array(label)
