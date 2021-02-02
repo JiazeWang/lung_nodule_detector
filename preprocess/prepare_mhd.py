@@ -202,14 +202,14 @@ def savenpy_luna_attribute(params_lists):
     isClean = True
     resolution = np.array([1, 1, 1])
     sliceim, origin, spacing = load_itk_image(inputpath)
-    lung_mask, _, _ = load_itk_image(maskpath)
+    #lung_mask, _, _ = load_itk_image(maskpath)
     np.save(savepath + '_origin.npy', origin)
     np.save(savepath + '_spacing.npy', spacing)
-    binary_mask1, binary_mask2 = lung_mask == 1, lung_mask == 2
-    binary_mask = binary_mask1 + binary_mask2
+    #binary_mask1, binary_mask2 = lung_mask == 1, lung_mask == 2
+    #binary_mask = binary_mask1 + binary_mask2
     ori_sliceim_shape_yx = sliceim.shape[1:3]
     sliceim = lumTrans(sliceim)
-    sliceim = apply_mask(sliceim, binary_mask1, binary_mask2)
+    #sliceim = apply_mask(sliceim, binary_mask1, binary_mask2)
     sliceim1, _ = resample(sliceim, spacing, resolution, order=1)
     #seg_img = sliceim1
     sliceim = sliceim1[np.newaxis, ...]
