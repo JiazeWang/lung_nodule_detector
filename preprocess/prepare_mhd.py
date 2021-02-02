@@ -256,7 +256,7 @@ def main():
         savedir = '_'.join(line.split("/"))
         get_lung(os.path.join("/research/dept8/jzwang/dataset/LUNA16/combined", line+'.mhd'), os.path.join(lung_mask_dir, savedir))
     """
-    annos = np.array(pandas.read_csv(luna_label))
+    annos = np.array(pandas.read_csv("../labels/annotations_three_all.csv"))
     params_lists = []
     for line in lines:
         line = line.rstrip()
