@@ -196,8 +196,8 @@ def apply_mask(image, binary_mask1, binary_mask2, pad_value=170,
     return image_new
 
 def savenpy_luna_attribute(params_lists):
-    inputpath, savepath, maskpath = params_lists
-    print("Save %s to numpy"%inputpath)
+    inputpath, savepath, maskpath, savename, annos = params_lists
+    print("Processing %s"%savename)
     islabel = True
     isClean = True
     resolution = np.array([1, 1, 1])
@@ -211,14 +211,29 @@ def savenpy_luna_attribute(params_lists):
     sliceim = lumTrans(sliceim)
     sliceim = apply_mask(sliceim, binary_mask1, binary_mask2)
     sliceim1, _ = resample(sliceim, spacing, resolution, order=1)
-    seg_img = sliceim1
-    lung_box = get_lung_box(binary_mask, seg_img.shape)
-    z_min, z_max = lung_box[0]
-    y_min, y_max = lung_box[1]
-    x_min, x_max = lung_box[2]
-    seg_img = seg_img[z_min:z_max, y_min:y_max, x_min:x_max]
-    #sliceim = sliceim1[np.newaxis, ...]
-    np.save(savepath + '_clean.npy', seg_img)
+    #seg_img = sliceim1
+    sliceim = sliceim1[np.newaxis, ...]
+    ###Save Label
+    np.save(savepath + '_clean.npy', sliceim)
+    this_annos = np.copy(annos[annos[:, 0] == int(savename)])
+    this_annos = np.copy(this_annos)
+    label = []
+    if len(this_annos) > 0:
+        for c in this_annos:
+            pos = worldToVoxelCoord(c[1:4][::-1], origin=origin, spacing=spacing)
+            if isflip:
+                pos[1:] = ori_sliceim_shape_yx - pos[1:]
+            label.append(np.concatenate([pos, [c[4] / spacing[1]]]))
+
+    label = np.array(label)
+    if len(label) == 0:
+        label2 = np.array([[0, 0, 0, 0]])
+    else:
+        label2 = np.copy(label).T
+        label2[:3] = label2[:3] * np.expand_dims(spacing, 1) / np.expand_dims(resolution, 1)
+        label2[3] = label2[3] * spacing[1] / resolution[1]
+        label2 = label2[:4].T
+    np.save(os.path.join(savepath, name + '_label.npy'), label2)
     #nrrd.write(savepath + '_clean.nrrd', seg_img)
     return 1
 
@@ -243,14 +258,15 @@ def main():
         savedir = '_'.join(line.split("/"))
         get_lung(os.path.join("/research/dept8/jzwang/dataset/LUNA16/combined", line+'.mhd'), os.path.join(lung_mask_dir, savedir))
     """
+    annos = np.array(pandas.read_csv(luna_label))
     params_lists = []
     for line in lines:
         line = line.rstrip()
         line = line
-        savename = '_'.join(line.split("/"))
+        savename = line
         npy_savepath = os.path.join(npy_dir, savename)
         mask_savepath =  os.path.join(lung_mask_dir, savename+'.mhd')
-        params_lists.append([os.path.join("/research/dept8/jzwang/dataset/LUNA16/combined", line+'.mhd'), npy_savepath, mask_savepath])
+        params_lists.append([os.path.join("/data/ssd/public/jzwang/tianchi_luna", line+'.mhd'), npy_savepath, mask_savepath, savename, annos])
     pool = Pool(processes=10)
     pool.map(savenpy_luna_attribute, params_lists)
     pool.close()
