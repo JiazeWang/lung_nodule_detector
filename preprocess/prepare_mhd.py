@@ -231,7 +231,7 @@ def savenpy_luna_attribute(params_lists):
         label2[:3] = label2[:3] * np.expand_dims(spacing, 1) / np.expand_dims(resolution, 1)
         label2[3] = label2[3] * spacing[1] / resolution[1]
         label2 = label2[:4].T
-    np.save(os.path.join(savepath, name + '_label.npy'), label2)
+    np.save(os.path.join(savepath + '_label.npy'), label2)
     #nrrd.write(savepath + '_clean.nrrd', seg_img)
     return 1
 
