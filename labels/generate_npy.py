@@ -13,7 +13,7 @@ for line in lines:
     valitem = line.rstrip()
     val.append(valitem)
     if valitem in train:
-        train.pop(valitem)
+        train.remove(valitem)
 print(len(train))
 print(len(val))
 
