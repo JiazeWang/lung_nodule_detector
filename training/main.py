@@ -213,7 +213,7 @@ def main():
 
     val_loader = DataLoader(
         val_dataset,
-        batch_size=args.batch_size/2,
+        batch_size=int(args.batch_size/2),
         shuffle=False,
         num_workers=args.workers,
         pin_memory=True)
@@ -262,7 +262,7 @@ def main():
         print ("epoch", epoch)
         train(train_loader, net, loss, epoch, optimizer, get_lr, args.save_freq, save_dir)
         best_val_loss = validate(val_loader, net, loss, best_val_loss, epoch, save_dir)
-        if ((epoch > 0) and ((epoch + 1) % 10) == 0):
+        if ((epoch > 30) and ((epoch + 1) % 10) == 0):
             best_test_loss = test_training(test_loader, net, get_pbb, save_dir, config, sidelen, best_test_loss, epoch, n_gpu)
 
         if ((epoch > 60) and ((epoch + 1) % 20) == 0):
