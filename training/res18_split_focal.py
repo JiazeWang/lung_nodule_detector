@@ -34,7 +34,7 @@ class Net(nn.Module):
             nn.Conv3d(24, 24, kernel_size = 3, padding = 1),
             nn.BatchNorm3d(24),
             nn.ReLU())
-        
+
         # 3 poolings, each pooling downsamples the feature map by a factor 2.
         # 3 groups of blocks. The first block of each group has one pooling.
         num_blocks_forw = [2,2,3,3]
@@ -50,7 +50,7 @@ class Net(nn.Module):
                     blocks.append(PostRes(self.featureNum_forw[i+1], self.featureNum_forw[i+1]))
             setattr(self, 'forw' + str(i + 1), nn.Sequential(*blocks))
 
-            
+
         for i in range(len(num_blocks_back)):
             blocks = []
             for j in range(num_blocks_back[i]):
@@ -108,11 +108,11 @@ class Net(nn.Module):
         out3 = self.forw3(out2_pool)#96
         out3_pool,indices3 = self.maxpool4(out3)
         out4 = self.forw4(out3_pool)#96
-        
+
         rev3 = self.path1(out4)
         comb3 = self.back3(torch.cat((rev3, out3), 1))#96+96
         rev2 = self.path2(comb3)
-        
+
         comb2 = self.back2(torch.cat((rev2, out2,coord), 1))#64+64
         comb2 = self.drop(comb2)
         nodule_out = self.nodule_output(comb2)
@@ -130,7 +130,7 @@ class Net(nn.Module):
         out = torch.cat((nodule_out, regress_out), 5)
         return out
 
-    
+
 def get_model():
     net = Net()
     loss = FocalLoss(config['num_hard'])
