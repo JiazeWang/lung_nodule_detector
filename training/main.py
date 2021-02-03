@@ -169,7 +169,7 @@ def main():
     if args.test == 1:
         #margin = 32
         #sidelen = 144
-        margin = 24
+        margin = 32
         sidelen = 96
         print ("args.test True")
         split_comber = SplitComb(sidelen, config['max_stride'], config['stride'], margin, config['pad_value'])
