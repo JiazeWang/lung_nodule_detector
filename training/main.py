@@ -31,11 +31,11 @@ parser.add_argument('--model', '-m', metavar='MODEL', default='base',
                     help='model')
 parser.add_argument('-j', '--workers', default=12, type=int, metavar='N',
                     help='number of data loading workers (default: 32)')
-parser.add_argument('--epochs', default=200, type=int, metavar='N',
+parser.add_argument('--epochs', default=120, type=int, metavar='N',
                     help='number of total epochs to run')
 parser.add_argument('--start-epoch', default=0, type=int, metavar='N',
                     help='manual epoch number (useful on restarts)')
-parser.add_argument('-b', '--batch-size', default=8, type=int,
+parser.add_argument('-b', '--batch-size', default=12, type=int,
                     metavar='N', help='mini-batch size (default: 16)')
 parser.add_argument('--lr', '--learning-rate', default=0.001, type=float,
                     metavar='LR', help='initial learning rate')
@@ -134,7 +134,6 @@ def main():
         else:
             save_dir = os.path.join('results', save_dir)
         net.load_state_dict(checkpoint['state_dict'])
-        start_epoch = 0
     else:
         if start_epoch == 0:
             start_epoch = 1
