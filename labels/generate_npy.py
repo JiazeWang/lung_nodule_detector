@@ -1,5 +1,5 @@
 import numpy as np
-with open ("annotations_three_all.csv", "r") as f:
+with open ("tianchi_luna.txt", "r") as f:
     lines = f.readlines()
 train = []
 for line in lines:
