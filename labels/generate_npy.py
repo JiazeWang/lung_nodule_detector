@@ -5,7 +5,7 @@ train = []
 for line in lines:
     line = line.rstrip()
     line = line[0:-4]
-    train.append(line[0])
+    train.append(line)
 with open ("val9.csv", "r") as f:
     lines = f.readlines()
 val = []
