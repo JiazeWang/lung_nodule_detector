@@ -14,13 +14,13 @@ import pandas
 import csv
 import io
 
-save_dir = 'results/res18_split_focal/bbox/'
+save_dir = 'training/results/res18_split_focal/bbox/'
 submit_file = './luna_submission_res18_split_30.csv'
 sid = './val9_sid.csv'
 
-val_num = np.load('val9.npy')
+val_num = np.load('traing/val_new.npy')
 luna_data = config['luna_data']
-luna_label = './labels/lunaqualified_all.csv'
+luna_label = './labels/annotations_three_all.csv'
 shorter_label = './labels/shorter.csv'
 resolution = np.array([1,1,1])
 annos = np.array(pandas.read_csv(luna_label))
@@ -38,21 +38,22 @@ def load_itk_image(filename):
         line = [k for k in contents if k.startswith('TransformMatrix')][0]
         transformM = np.array(line.split(' = ')[1].split(' ')).astype('float')
         transformM = np.round(transformM)
+        """
         if np.any( transformM!=np.array([1,0,0, 0, 1, 0, 0, 0, 1])):
             isflip = True
         else:
             isflip = False
-
+        """
     itkimage = sitk.ReadImage(filename)
     numpyImage = sitk.GetArrayFromImage(itkimage)
     numpyOrigin = np.array(list(reversed(itkimage.GetOrigin())))
     numpySpacing = np.array(list(reversed(itkimage.GetSpacing())))
 
-    return numpyImage, numpyOrigin, numpySpacing, isflip
+    return numpyImage, numpyOrigin, numpySpacing
 
 
 def convert_worldcoord(idx, pbb, filename_dict):
-    sliceim, origin, spacing, isflip = load_itk_image(os.path.join(luna_data, filename_dict[idx] + '.mhd'))
+    sliceim, origin, spacing = load_itk_image(os.path.join(luna_data, filename_dict[idx] + '.mhd'))
     #Mask, extendbox = Mask_info(idx, filename_dict)
     ori_sliceim_shape_yx = sliceim.shape[1:3]
     for label in pbb:
@@ -60,11 +61,12 @@ def convert_worldcoord(idx, pbb, filename_dict):
         radious_ori = label[4]
         #pos_ori = pos_ori + extendbox[:, 0]
         pos_ori = pos_ori * resolution / spacing
-
+        """
         if isflip:
             pos_ori[1:] = ori_sliceim_shape_yx - pos_ori[1:]
             pos_ori[1] = pos_ori[1] * -1
             pos_ori[2] = pos_ori[2] * -1
+        """
 
         pos_ori = pos_ori * spacing
         pos_ori = pos_ori + origin
