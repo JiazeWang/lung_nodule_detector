@@ -150,7 +150,8 @@ if __name__ == '__main__':
         nms_pbb = nms(pbb[i], nms_th)
         world_pbb = convert_worldcoord(i, nms_pbb, filename_dict)
         print (filename_dict[i])
-        s_id = namelist[ids.index(int(filename_dict[i]))]
+        #s_id = namelist[ids.index(int(filename_dict[i])]
+        s_id = namelist[i]
         #csv_sid.append([s_id.encode()])
         csv_sid.append([s_id])
         for candidate in world_pbb:
