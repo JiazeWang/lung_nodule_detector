@@ -257,6 +257,8 @@ def main():
     best_test_loss = 0
 
     for epoch in range(start_epoch, args.epochs + 1):
+        print("test validate")
+        best_val_loss = validate(val_loader, net, loss, best_val_loss, epoch, save_dir)
         print ("epoch", epoch)
         train(train_loader, net, loss, epoch, optimizer, get_lr, args.save_freq, save_dir)
         best_val_loss = validate(val_loader, net, loss, best_val_loss, epoch, save_dir)
