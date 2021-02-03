@@ -4,7 +4,7 @@ with open ("annotations_three_all.csv", "r") as f:
 train = []
 for line in lines:
     line = line.rstrip()
-    line = line.split(",")
+    line = line[0:-4]
     train.append(line[0])
 with open ("val9.csv", "r") as f:
     lines = f.readlines()[1:]
