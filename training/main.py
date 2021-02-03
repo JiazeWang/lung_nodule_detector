@@ -507,7 +507,7 @@ def singletest(data, net, config, splitfun, combinefun, n_per_run, margin=64):
     z, h, w = data.size(2), data.size(3), data.size(4)
     print(data.size())
     data = splitfun(data, config['max_stride'], margin)
-    data = Variable(data.cuda(non_blocking=True), requires_grad=True, requires_grad=False)
+    data = Variable(data.cuda(non_blocking=True), requires_grad=False)
     splitlist = range(0, args.split + 1, n_per_run)
     outputlist = []
 
