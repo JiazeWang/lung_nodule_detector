@@ -167,8 +167,10 @@ def main():
     print ("th_pos_train", config['th_pos_train'])
 
     if args.test == 1:
-        margin = 32
-        sidelen = 144
+        #margin = 32
+        #sidelen = 144
+        margin = 0
+        sidelen = 96
         print ("args.test True")
         split_comber = SplitComb(sidelen, config['max_stride'], config['stride'], margin, config['pad_value'])
         dataset = data.DataBowl3Detector(
@@ -217,9 +219,10 @@ def main():
         num_workers=args.workers,
         pin_memory=True)
 
-    margin = 32
-    sidelen = 144
-
+    #margin = 32
+    #sidelen = 144
+    margin = 0
+    sidelen = 96
     split_comber = SplitComb(sidelen, config['max_stride'], config['stride'], margin, config['pad_value'])
     test_dataset = data.DataBowl3Detector(
         datadir,
