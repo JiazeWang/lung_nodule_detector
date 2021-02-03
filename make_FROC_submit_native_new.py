@@ -18,7 +18,7 @@ save_dir = 'training/results/res18_split_focal/bbox/'
 submit_file = './luna_submission_res18_split_30.csv'
 sid = './val9_sid.csv'
 
-val_num = np.load('traing/val_new.npy')
+val_num = np.load('training/val_new.npy')
 luna_data = config['luna_data']
 luna_label = './labels/annotations_three_all.csv'
 shorter_label = './labels/shorter.csv'
