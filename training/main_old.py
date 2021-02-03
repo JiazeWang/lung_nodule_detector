@@ -31,13 +31,13 @@ parser.add_argument('--model', '-m', metavar='MODEL', default='base',
                     help='model')
 parser.add_argument('-j', '--workers', default=12, type=int, metavar='N',
                     help='number of data loading workers (default: 32)')
-parser.add_argument('--epochs', default=200, type=int, metavar='N',
+parser.add_argument('--epochs', default=1000, type=int, metavar='N',
                     help='number of total epochs to run')
 parser.add_argument('--start-epoch', default=0, type=int, metavar='N',
                     help='manual epoch number (useful on restarts)')
 parser.add_argument('-b', '--batch-size', default=8, type=int,
                     metavar='N', help='mini-batch size (default: 16)')
-parser.add_argument('--lr', '--learning-rate', default=0.001, type=float,
+parser.add_argument('--lr', '--learning-rate', default=0.01, type=float,
                     metavar='LR', help='initial learning rate')
 parser.add_argument('--momentum', default=0.9, type=float, metavar='M',
                     help='momentum')
@@ -173,7 +173,7 @@ def main():
         split_comber = SplitComb(sidelen, config['max_stride'], config['stride'], margin, config['pad_value'])
         dataset = data.DataBowl3Detector(
             datadir,
-            'val_new.npy',
+            'val9.npy',
             config,
             phase='test',
             split_comber=split_comber)
@@ -192,7 +192,7 @@ def main():
 
     train_dataset = data.DataBowl3Detector(
         datadir,
-        'train_new.npy',
+        'train_luna_9.npy',
         config,
         phase='train')
     print ("len train_dataset", train_dataset.__len__())
@@ -205,7 +205,7 @@ def main():
 
     val_dataset = data.DataBowl3Detector(
         datadir,
-        'val_new.npy',
+        'val9.npy',
         config,
         phase='val')
     print ("len val_dataset", val_dataset.__len__())
@@ -223,7 +223,7 @@ def main():
     split_comber = SplitComb(sidelen, config['max_stride'], config['stride'], margin, config['pad_value'])
     test_dataset = data.DataBowl3Detector(
         datadir,
-        'val_new.npy',
+        'val9.npy',
         config,
         phase='test',
         split_comber=split_comber)
@@ -259,10 +259,10 @@ def main():
         print ("epoch", epoch)
         train(train_loader, net, loss, epoch, optimizer, get_lr, args.save_freq, save_dir)
         best_val_loss = validate(val_loader, net, loss, best_val_loss, epoch, save_dir)
-        if ((epoch > 0) and ((epoch + 1) % 5) == 0):
+        if ((epoch > 150) and ((epoch + 1) % 10) == 0):
             best_test_loss = test_training(test_loader, net, get_pbb, save_dir, config, sidelen, best_test_loss, epoch, n_gpu)
 
-        if ((epoch > 60) and ((epoch + 1) % 20) == 0):
+        if ((epoch > 300) and ((epoch + 1) % 100) == 0):
             num_neg = train_dataset.get_neg_num_neg() + 800
             train_dataset.set_neg_num_neg(num_neg)
 
