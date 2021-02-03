@@ -278,7 +278,7 @@ def train(data_loader, net, loss, epoch, optimizer, get_lr, save_freq, save_dir)
         param_group['lr'] = lr
 
     metrics = []
-    for i, (data, target, coord) in enumerate(data_loader, 1):
+    for i, (data, target, coord) in enumerate(data_loader):
         data = Variable(data.cuda(non_blocking=True))
         target = Variable(target.cuda(non_blocking=True))
         coord = Variable(coord.cuda(non_blocking=True))
@@ -330,7 +330,7 @@ def validate(data_loader, net, loss, best_val_loss, epoch, save_dir):
     net.eval()
 
     metrics = []
-    for i, (data, target, coord) in enumerate(data_loader, 1):
+    for i, (data, target, coord) in enumerate(data_loader):
         data = Variable(data.cuda(non_blocking=True), requires_grad=True)
         target = Variable(target.cuda(non_blocking=True), requires_grad=True)
         coord = Variable(coord.cuda(non_blocking=True), requires_grad=True)
@@ -391,7 +391,7 @@ def test_training(data_loader, net, get_pbb, save_dir, config, sidelen, best_tes
     lbb_list = []
 
     split_comber = data_loader.dataset.split_comber
-    for i_name, (data, target, coord, nzhw) in enumerate(data_loader, 1):
+    for i_name, (data, target, coord, nzhw) in enumerate(data_loader):
         s = time.time()
         target = [np.asarray(t, np.float32) for t in target]
         lbb = target[0]
@@ -461,7 +461,7 @@ def test(data_loader, net, get_pbb, save_dir, config, sidelen):
     net.eval()
     namelist = []
     split_comber = data_loader.dataset.split_comber
-    for i_name, (data, target, coord, nzhw) in enumerate(data_loader, 1):
+    for i_name, (data, target, coord, nzhw) in enumerate(data_loader):
         print ("i_name", i_name)
         s = time.time()
         target = [np.asarray(t, np.float32) for t in target]
@@ -507,7 +507,7 @@ def singletest(data, net, config, splitfun, combinefun, n_per_run, margin=64):
     z, h, w = data.size(2), data.size(3), data.size(4)
     print(data.size())
     data = splitfun(data, config['max_stride'], margin)
-    data = Variable(data.cuda(non_blocking=True),  requires_grad=False)
+    data = Variable(data.cuda(non_blocking=True), requires_grad=False)
     splitlist = range(0, args.split + 1, n_per_run)
     outputlist = []
 
