@@ -134,6 +134,7 @@ def main():
         else:
             save_dir = os.path.join('results', save_dir)
         net.load_state_dict(checkpoint['state_dict'])
+        start_epoch = 0
     else:
         if start_epoch == 0:
             start_epoch = 1
