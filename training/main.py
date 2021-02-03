@@ -289,7 +289,7 @@ def train(data_loader, net, loss, epoch, optimizer, get_lr, save_freq, save_dir)
         loss_output[0].backward()
         optimizer.step()
 
-        loss_output[0] = loss_output[0].data[0]
+        loss_output[0] = loss_output[0].item()
         metrics.append(loss_output)
 
     if epoch % args.save_freq == 0:
@@ -331,14 +331,14 @@ def validate(data_loader, net, loss, best_val_loss, epoch, save_dir):
 
     metrics = []
     for i, (data, target, coord) in enumerate(data_loader):
-        data = Variable(data.cuda(non_blocking=True), volatile=True)
-        target = Variable(target.cuda(non_blocking=True), volatile=True)
-        coord = Variable(coord.cuda(non_blocking=True), volatile=True)
+        data = Variable(data.cuda(non_blocking=True), requires_grad=True)
+        target = Variable(target.cuda(non_blocking=True), requires_grad=True)
+        coord = Variable(coord.cuda(non_blocking=True), requires_grad=True)
 
         output = net(data, coord)
         loss_output = loss(output, target, train=False)
 
-        loss_output[0] = loss_output[0].data[0]
+        loss_output[0] = loss_output[0].item()
         metrics.append(loss_output)
     end_time = time.time()
 
@@ -409,8 +409,8 @@ def test_training(data_loader, net, get_pbb, save_dir, config, sidelen, best_tes
         outputlist = []
 
         for i in range(len(splitlist) - 1):
-            input = Variable(data[splitlist[i]:splitlist[i + 1]], volatile=True).cuda()
-            inputcoord = Variable(coord[splitlist[i]:splitlist[i + 1]], volatile=True).cuda()
+            input = Variable(data[splitlist[i]:splitlist[i + 1]], requires_grad=True).cuda()
+            inputcoord = Variable(coord[splitlist[i]:splitlist[i + 1]], requires_grad=True).cuda()
             output = net(input, inputcoord)
             outputlist.append(output.data.cpu().numpy())
         output = np.concatenate(outputlist, 0)
@@ -481,8 +481,8 @@ def test(data_loader, net, get_pbb, save_dir, config, sidelen):
         featurelist = []
 
         for i in range(len(splitlist) - 1):
-            input = Variable(data[splitlist[i]:splitlist[i + 1]], volatile=True).cuda()
-            inputcoord = Variable(coord[splitlist[i]:splitlist[i + 1]], volatile=True).cuda()
+            input = Variable(data[splitlist[i]:splitlist[i + 1]], requires_grad=True).cuda()
+            inputcoord = Variable(coord[splitlist[i]:splitlist[i + 1]], requires_grad=True).cuda()
             output = net(input, inputcoord)
             outputlist.append(output.data.cpu().numpy())
         output = np.concatenate(outputlist, 0)
@@ -507,7 +507,7 @@ def singletest(data, net, config, splitfun, combinefun, n_per_run, margin=64):
     z, h, w = data.size(2), data.size(3), data.size(4)
     print(data.size())
     data = splitfun(data, config['max_stride'], margin)
-    data = Variable(data.cuda(non_blocking=True), volatile=True, requires_grad=False)
+    data = Variable(data.cuda(non_blocking=True), requires_grad=True, requires_grad=False)
     splitlist = range(0, args.split + 1, n_per_run)
     outputlist = []
 
