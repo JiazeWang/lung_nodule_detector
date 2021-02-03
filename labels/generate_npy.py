@@ -10,10 +10,10 @@ with open ("val9.csv", "r") as f:
     lines = f.readlines()[1:]
 val = []
 for line in lines:
-    val = line.rstrip()
-    val.append(line[0])
-    if line[0] in train:
-        train.pop(line[0])
+    valitem = line.rstrip()
+    val.append(valitem)
+    if valitem in train:
+        train.pop(valitem)
 print(len(train))
 print(len(val))
 
