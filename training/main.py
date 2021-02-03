@@ -43,7 +43,7 @@ parser.add_argument('--momentum', default=0.9, type=float, metavar='M',
                     help='momentum')
 parser.add_argument('--weight-decay', '--wd', default=1e-4, type=float,
                     metavar='W', help='weight decay (default: 1e-4)')
-parser.add_argument('--save-freq', default='10', type=int, metavar='S',
+parser.add_argument('--save-freq', default='5', type=int, metavar='S',
                     help='save frequency')
 parser.add_argument('--resume', default='', type=str, metavar='PATH',
                     help='path to latest checkpoint (default: none)')
@@ -264,7 +264,7 @@ def main():
         print ("epoch", epoch)
         train(train_loader, net, loss, epoch, optimizer, get_lr, args.save_freq, save_dir)
         best_val_loss = validate(val_loader, net, loss, best_val_loss, epoch, save_dir)
-        if ((epoch > 30) and ((epoch + 1) % 10) == 0):
+        if ((epoch > 30) and ((epoch + 1) % 20) == 0):
             best_test_loss = test_training(test_loader, net, get_pbb, save_dir, config, sidelen, best_test_loss, epoch, n_gpu)
 
         if ((epoch > 60) and ((epoch + 1) % 20) == 0):
