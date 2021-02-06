@@ -17,9 +17,7 @@ def sigmoid(x):
 
 def convert_worldcoord(idx, pbb, filename):
     origin = np.load(filename+'_origin.npy')
-    origin = np.array(list(reversed(origin)))
     spacing = np.load(filename+'_spacing.npy')
-    spacing = np.array(list(reversed(spacing)))
     for label in pbb:
         pos_ori = label[1:4]
         radious_ori = label[4]
