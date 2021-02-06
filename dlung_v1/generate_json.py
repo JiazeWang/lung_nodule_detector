@@ -19,7 +19,7 @@ def convert_worldcoord(idx, pbb, filename):
     origin = np.load(filename+'_origin.npy')
     spacing = np.load(filename+'_spacing.npy')
     for label in pbb:
-        pos_ori = label[1:4]
+        pos_ori = np.array(list(reversed(pos_ori)))
         radious_ori = label[4]
         #pos_ori = pos_ori + extendbox[:, 0]
         pos_ori = pos_ori * resolution / spacing
