@@ -16,7 +16,7 @@ import io
 
 save_dir = '/research/dept8/jzwang/code/lung_nodule_detector/training/results/hku_lo_archors_6912/bbox/'
 submit_file = './hku_submission_6912.csv'
-sid = './preprocess/hku_list_test.csv'
+sid = './preprocess/hku_list_test_6.csv'
 
 val_num = np.load('val_hku.npy')
 luna_data = '/research/dept8/jzwang/dataset/HKU/TOUSE/'
