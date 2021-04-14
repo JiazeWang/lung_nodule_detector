@@ -215,6 +215,7 @@ def savenpy_luna_attribute(params_lists):
     sliceim = sliceim1[np.newaxis, ...]
     ###Save Label
     np.save(savepath + '_clean.npy', sliceim)
+    print(savename)
     this_annos = np.copy(annos[annos[:, 0] == savename])
     this_annos = np.copy(this_annos)
     label = []
