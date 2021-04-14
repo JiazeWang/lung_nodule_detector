@@ -1,5 +1,5 @@
 sid="./preprocess/hku_list_test.csv"
-submit="'/research/dept8/jzwang/code/lung_nodule_detector/hku_submission_5.csv'"
+submit="/research/dept8/jzwang/code/lung_nodule_detector/hku_submission_5.csv"
 
 
 
