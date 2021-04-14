@@ -7,7 +7,7 @@ def list2numpy(list_dir, save_dir):
         lines = f.readlines()
     for line in lines:
         line = line.rstrip()
-        pids.append(line)
+        pid.append(line)
     pid = numpy.array(pid)
     np.save(save_dir, list_dir)
 
