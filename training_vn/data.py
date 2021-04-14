@@ -3,6 +3,7 @@ import torch
 from torch.utils.data import Dataset
 import os
 import time
+import nrrd
 import collections
 import random
 from layers import iou
