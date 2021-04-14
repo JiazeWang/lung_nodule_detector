@@ -96,6 +96,7 @@ if __name__ == '__main__':
     print ("datadir", luna_data)
 
     for i in range(len(val_num)):
+        print("i0:",i)
         pbb_item = np.load(save_dir + str(val_num[i]) + '_pbb.npy')
         lbb_item = np.load(save_dir + str(val_num[i]) + '_lbb.npy')
 
@@ -133,7 +134,7 @@ if __name__ == '__main__':
     detect_th  = 0.3
 
     for i in range(len(pbb)):
-        print("i:",i)
+        print("i1:",i)
         nms_pbb = nms(pbb[i], nms_th)
         world_pbb = convert_worldcoord(i, nms_pbb, filename_dict)
         print (filename_dict[i])
