@@ -1,4 +1,4 @@
-sid="val9_sid.csv"
+sid="./preprocess/hku_list_test.csv"
 submit="luna_submission_res18_split_30.csv"
 
 #cp ${sid} ./evaluationScript/annotations/
@@ -8,6 +8,14 @@ submit="luna_submission_res18_split_30.csv"
 mkdir ./evaluationScript_py3/exampleFiles/res18_split_30
 python ./evaluationScript_py3/noduleCADEvaluationLUNA16.py \
         ./evaluationScript_py3/annotations/annotations.csv \
+        ./evaluationScript_py3/annotations/annotations_excluded.csv \
+        ${sid} \
+        ${submit} \
+        ./evaluationScript_py3/exampleFiles/res18_split_30/
+
+mkdir ./evaluationScript_py3/exampleFiles/res18_split_30
+python ./evaluationScript_py3/noduleCADEvaluationLUNA16.py \
+        ./preprocess/annotations_hku.csv \
         ./evaluationScript_py3/annotations/annotations_excluded.csv \
         ${sid} \
         ${submit} \

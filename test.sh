@@ -1,1 +1,1 @@
-python training/main.py --model res18_split_focal --gpu 3 --save-dir res18_split_focal --batch-size 1 --resume ./results/res18_split_focal/200.ckpt  --test 1 --n_test 1
+python training/main.py --model res18_split_focal --gpu 0 --save-dir res18_split_focal --batch-size 1 --resume /research/dept8/jzwang/code/lung_nodule_detector/training/results/hku_lo_archors_5_10_30/500.ckpt  --test 1 --n_test 1
