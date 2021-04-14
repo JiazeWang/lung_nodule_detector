@@ -225,7 +225,7 @@ class Crop(object):
             if s>e:
                 start.append(np.random.randint(e,s))#!
             else:
-                start.append(int(target[i])-crop_size[i]/2+np.random.randint(-bound_size/2,bound_size/2))
+                start.append(int(int(target[i])-crop_size[i]/2+np.random.randint(-bound_size/2,bound_size/2)))
 
         normstart = np.array(start).astype('float32')/np.array(imgs.shape[1:])-0.5
         normsize = np.array(crop_size).astype('float32')/np.array(imgs.shape[1:])
