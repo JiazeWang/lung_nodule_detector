@@ -8,8 +8,8 @@ def list2numpy(list_dir, save_dir):
     for line in lines:
         line = line.rstrip()
         pid.append(line)
-    pid = numpy.array(pid)
-    np.save(save_dir, list_dir)
+    pid = np.array(pid)
+    np.save(save_dir, pid)
 
 if __name__ == '__main__':
     list2numpy("hku_list_test.csv", "val_hku.npy")
