@@ -60,7 +60,7 @@ class DataBowl3Detector(Dataset):
         self.label_mapping = LabelMapping(config, self.phase)
 
     def load_img(self, path_to_img):
-        img, _ = nrrd.read(os.path.join(self.data_dir, '%s_clean.nrrd' % (path_to_img)))
+        img, _ = nrrd.read(os.path.join(self.data_dir, path_to_img))
         img = img[np.newaxis,...]
         return img
 
