@@ -215,17 +215,18 @@ def savenpy_luna_attribute(params_lists):
     sliceim = sliceim1[np.newaxis, ...]
     ###Save Label
     np.save(savepath + '_clean.npy', sliceim)
-    print(savename)
-    this_annos = np.copy(annos[annos[:, 0] == savename])
+    this_annos = np.copy(int(annos[annos[:, 0]) == savename])
     this_annos = np.copy(this_annos)
     label = []
     if len(this_annos) > 0:
+        print("len OK")
         for c in this_annos:
             pos = worldToVoxelCoord(c[1:4][::-1], origin=origin, spacing=spacing)
             label.append(np.concatenate([pos, [c[4] / spacing[1]]]))
 
     label = np.array(label)
     if len(label) == 0:
+        print("len 0")
         label2 = np.array([[0, 0, 0, 0]])
     else:
         label2 = np.copy(label).T
