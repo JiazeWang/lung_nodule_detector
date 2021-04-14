@@ -29,7 +29,7 @@ class DataBowl3Detector(Dataset):
         if phase!='test':
             idcs = [f for f in idcs if (f not in self.blacklist)]
 
-        self.filenames = [os.path.join(data_dir, '%s_clean.npy' % idx) for idx in idcs]
+        self.filenames = [os.path.join(data_dir, '%s_clean.nrrd' % idx) for idx in idcs]
 
         #self.kagglenames = [f for f in self.filenames if len(f.split('/')[-1].split('_')[0])>20]
         self.lunanames = [f for f in self.filenames if len(f.split('/')[-1].split('_')[0])<20]
@@ -37,7 +37,7 @@ class DataBowl3Detector(Dataset):
         labels = []
 
         for idx in idcs:
-            l = np.load(os.path.join(data_dir, '%s_label.npy' %idx), allow_pickle=True)
+            l = np.load(os.path.join(data_dir, '%s_bboxes.npy' %idx), allow_pickle=True)
             if np.all(l==0):
                 l=np.array([])
             labels.append(l)
@@ -56,6 +56,12 @@ class DataBowl3Detector(Dataset):
 
         self.crop = Crop(config)
         self.label_mapping = LabelMapping(config, self.phase)
+
+    def load_img(self, path_to_img):
+        img, _ = nrrd.read(os.path.join(self.data_dir, '%s_clean.nrrd' % (path_to_img)))
+        img = img[np.newaxis,...]
+        return img
+
 
     def __getitem__(self, idx,split=None):
         #print ('get item', idx)
@@ -77,7 +83,8 @@ class DataBowl3Detector(Dataset):
 
                 bbox = self.bboxes[idx]
                 filename = self.filenames[int(bbox[0])]
-                imgs = np.load(filename, allow_pickle=True)
+                #imgs = np.load(filename, allow_pickle=True)
+                imgs = self.load_img(filename)
                 bboxes = self.sample_bboxes[int(bbox[0])]
                 isScale = self.augtype['scale'] and (self.phase=='train')
                 sample, target, bboxes, coord = self.crop(imgs, bbox[1:], bboxes,isScale,isRandom)
@@ -87,7 +94,8 @@ class DataBowl3Detector(Dataset):
             else:
                 randimid = np.random.randint(len(self.lunanames))
                 filename = self.lunanames[randimid]
-                imgs = np.load(filename, allow_pickle=True)
+                #imgs = np.load(filename, allow_pickle=True)
+                imgs = self.load_img(filename)
                 bboxes = self.sample_bboxes[randimid]
                 isScale = self.augtype['scale'] and (self.phase=='train')
                 sample, target, bboxes, coord = self.crop(imgs, [], bboxes,isScale=False,isRand=True)
@@ -95,7 +103,8 @@ class DataBowl3Detector(Dataset):
             sample = (sample.astype(np.float32)-128)/128
             return torch.from_numpy(sample), torch.from_numpy(label), coord
         else:
-            imgs = np.load(self.filenames[idx], allow_pickle=True)
+            #imgs = np.load(self.filenames[idx], allow_pickle=True)
+            imgs = self.load_img(self.filenames[idx])
             bboxes = self.sample_bboxes[idx]
             nz, nh, nw = imgs.shape[1:]
             pz = int(np.ceil(float(nz) / self.stride)) * self.stride

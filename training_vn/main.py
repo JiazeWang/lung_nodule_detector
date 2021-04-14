@@ -18,7 +18,7 @@ from torch.backends import cudnn
 from torch.utils.data import DataLoader
 from torch import optim
 from torch.autograd import Variable
-from config_training import config as config_training
+from config_training_hku import config as config_training
 from torch import nn
 import math
 from layers import acc
@@ -29,13 +29,13 @@ from layers import acc
 parser = argparse.ArgumentParser(description='PyTorch DataBowl3 Detector')
 parser.add_argument('--model', '-m', metavar='MODEL', default='base',
                     help='model')
-parser.add_argument('-j', '--workers', default=12, type=int, metavar='N',
+parser.add_argument('-j', '--workers', default=16, type=int, metavar='N',
                     help='number of data loading workers (default: 32)')
 parser.add_argument('--epochs', default=120, type=int, metavar='N',
                     help='number of total epochs to run')
 parser.add_argument('--start-epoch', default=0, type=int, metavar='N',
                     help='manual epoch number (useful on restarts)')
-parser.add_argument('-b', '--batch-size', default=12, type=int,
+parser.add_argument('-b', '--batch-size', default=16, type=int,
                     metavar='N', help='mini-batch size (default: 16)')
 parser.add_argument('--lr', '--learning-rate', default=0.001, type=float,
                     metavar='LR', help='initial learning rate')
@@ -47,7 +47,7 @@ parser.add_argument('--save-freq', default='5', type=int, metavar='S',
                     help='save frequency')
 parser.add_argument('--resume', default='', type=str, metavar='PATH',
                     help='path to latest checkpoint (default: none)')
-parser.add_argument('--save-dir', default='log', type=str, metavar='SAVE',
+parser.add_argument('--save-dir', default='log_hku', type=str, metavar='SAVE',
                     help='directory to save checkpoint (default: none)')
 parser.add_argument('--test', default=0, type=int, metavar='TEST',
                     help='1 do test evaluation, 0 not')
@@ -167,15 +167,15 @@ def main():
     print ("th_pos_train", config['th_pos_train'])
 
     if args.test == 1:
-        #margin = 32
-        #sidelen = 144
         margin = 32
-        sidelen = 96
+        sidelen = 144
+        #margin = 32
+        #sidelen = 96
         print ("args.test True")
         split_comber = SplitComb(sidelen, config['max_stride'], config['stride'], margin, config['pad_value'])
         dataset = data.DataBowl3Detector(
             datadir,
-            'val_new.npy',
+            'val_hku.npy',
             config,
             phase='test',
             split_comber=split_comber)
@@ -194,7 +194,7 @@ def main():
 
     train_dataset = data.DataBowl3Detector(
         datadir,
-        'train_new.npy',
+        'train_hku.npy',
         config,
         phase='train')
     print ("len train_dataset", train_dataset.__len__())
@@ -207,7 +207,7 @@ def main():
 
     val_dataset = data.DataBowl3Detector(
         datadir,
-        'val_new.npy',
+        'val_hku.npy',
         config,
         phase='val')
     print ("len val_dataset", val_dataset.__len__())
@@ -219,14 +219,14 @@ def main():
         num_workers=args.workers,
         pin_memory=True)
 
-    #margin = 32
-    #sidelen = 144
     margin = 32
-    sidelen = 96
+    sidelen = 144
+    #margin = 32
+    #sidelen = 96
     split_comber = SplitComb(sidelen, config['max_stride'], config['stride'], margin, config['pad_value'])
     test_dataset = data.DataBowl3Detector(
         datadir,
-        'val_new.npy',
+        'val_hku.npy',
         config,
         phase='test',
         split_comber=split_comber)
