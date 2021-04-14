@@ -238,7 +238,7 @@ def savenpy_luna_attribute(params_lists):
 def main():
     img_dir = config["img_dir"]
     #data_txt = config["data_txt"]
-    data_txt = "tianchi_luna.txt"
+    data_txt = "hkt_list.txt"
     lung_mask_dir = config["lung_mask_dir"]
     npy_dir = config["npy_dir"]
     if not os.path.exists(lung_mask_dir):
@@ -248,23 +248,23 @@ def main():
     with open(data_txt, "r") as f:
         lines = f.readlines()
     params_lists = []
-
+    """
     for line in lines:
         print("lung segmentation:", line)
         line = line.rstrip()
-        line = line[0:-4]
+        line = line
         savedir = line
         get_lung(os.path.join("/data/ssd/public/jzwang/tianchi_luna", line+'.mhd'), os.path.join(lung_mask_dir, savedir))
-
-    annos = np.array(pandas.read_csv("../labels/annotations_three_all.csv"))
+    """
+    annos = np.array(pandas.read_csv("annotations_hku.csv"))
     params_lists = []
     for line in lines:
         line = line.rstrip()
-        line = line[0:-4]
+        line = line
         savename = line
         npy_savepath = os.path.join(npy_dir, savename)
         mask_savepath =  os.path.join(lung_mask_dir, savename+'.mhd')
-        params_lists.append([os.path.join("/data/ssd/public/jzwang/tianchi_luna", line+'.mhd'), npy_savepath, mask_savepath, savename, annos])
+        params_lists.append([os.path.join("/research/dept8/jzwang/dataset/HKU/TOUSE", '%s/%s.nii' % (line, line)), npy_savepath, mask_savepath, savename, annos])
     pool = Pool(processes=10)
     pool.map(savenpy_luna_attribute, params_lists)
     pool.close()
