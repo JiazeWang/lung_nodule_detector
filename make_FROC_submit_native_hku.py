@@ -16,45 +16,33 @@ import io
 
 save_dir = '/research/dept8/jzwang/code/lung_nodule_detector/training/results/test_5_10_30/bbox'
 submit_file = './hku_submission_5.csv'
-sid = './preprocess/annotations_hku.csv'
+sid = './preprocess/hku_list_test.csv'
 
 val_num = np.load('val_hku.npy')
-luna_data = config['luna_data']
-luna_label = './labels/lunaqualified_all.csv'
-shorter_label = './labels/shorter.csv'
+luna_data = '/research/dept8/jzwang/dataset/HKU/preprocessed/TOUSE/'
+luna_label = './preprocess/annotations_hku.csv'
 resolution = np.array([1,1,1])
 annos = np.array(pandas.read_csv(luna_label))
 
-abbrevs = np.array(pandas.read_csv(shorter_label, header=None))
-namelist = abbrevs[:, 1]
-ids = list(abbrevs[:, 0])
+
 
 def sigmoid(x):
   return 1 / (1 + math.exp(-x))
 
 def load_itk_image(filename):
-    with open(filename) as f:
-        contents = f.readlines()
-        line = [k for k in contents if k.startswith('TransformMatrix')][0]
-        transformM = np.array(line.split(' = ')[1].split(' ')).astype('float')
-        transformM = np.round(transformM)
-        if np.any( transformM!=np.array([1,0,0, 0, 1, 0, 0, 0, 1])):
-            isflip = True
-        else:
-            isflip = False
-
     itkimage = sitk.ReadImage(filename)
     numpyImage = sitk.GetArrayFromImage(itkimage)
     numpyOrigin = np.array(list(reversed(itkimage.GetOrigin())))
     numpySpacing = np.array(list(reversed(itkimage.GetSpacing())))
 
-    return numpyImage, numpyOrigin, numpySpacing, isflip
+    return numpyImage, numpyOrigin, numpySpacing
 
 
 def convert_worldcoord(idx, pbb, filename_dict):
-    sliceim, origin, spacing, isflip = load_itk_image(os.path.join(luna_data, filename_dict[idx] + '.mhd'))
+    sliceim, origin, spacing = load_itk_image(os.path.join(luna_data, '%s/%s.nii' % (filename_dict[idx], filename_dict[idx])))
     #Mask, extendbox = Mask_info(idx, filename_dict)
     ori_sliceim_shape_yx = sliceim.shape[1:3]
+    isflip = 0
     for label in pbb:
         pos_ori = label[1:4]
         radious_ori = label[4]
@@ -148,7 +136,7 @@ if __name__ == '__main__':
         nms_pbb = nms(pbb[i], nms_th)
         world_pbb = convert_worldcoord(i, nms_pbb, filename_dict)
         print (filename_dict[i])
-        s_id = namelist[ids.index(int(filename_dict[i]))]
+        s_id = filename_dict[i]
         #csv_sid.append([s_id.encode()])
         csv_sid.append([s_id])
         for candidate in world_pbb:
