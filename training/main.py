@@ -47,7 +47,7 @@ parser.add_argument('--save-freq', default='5', type=int, metavar='S',
                     help='save frequency')
 parser.add_argument('--resume', default='', type=str, metavar='PATH',
                     help='path to latest checkpoint (default: none)')
-parser.add_argument('--save-dir', default='hku_lo_archors_6912', type=str, metavar='SAVE',
+parser.add_argument('--save-dir', default='hku_lo_archors_big', type=str, metavar='SAVE',
                     help='directory to save checkpoint (default: none)')
 parser.add_argument('--test', default=0, type=int, metavar='TEST',
                     help='1 do test evaluation, 0 not')
