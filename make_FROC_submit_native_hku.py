@@ -19,7 +19,7 @@ submit_file = './hku_submission_5.csv'
 sid = './preprocess/hku_list_test.csv'
 
 val_num = np.load('val_hku.npy')
-luna_data = '/research/dept8/jzwang/dataset/HKU/preprocessed/TOUSE/'
+luna_data = '/research/dept8/jzwang/dataset/HKU/TOUSE/'
 luna_label = './preprocess/annotations_hku.csv'
 resolution = np.array([1,1,1])
 annos = np.array(pandas.read_csv(luna_label))
