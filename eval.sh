@@ -1,5 +1,5 @@
 sid="./preprocess/hku_list_test.csv"
-submit="luna_submission_res18_split_30.csv"
+submit="'./hku_submission_5.csv'"
 
 #cp ${sid} ./evaluationScript/annotations/
 #cp ${submit} ./evaluationScript/exampleFiles/submission/
