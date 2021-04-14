@@ -214,7 +214,7 @@ def main():
 
     val_loader = DataLoader(
         val_dataset,
-        batch_size=int(args.batch_size/2),
+        batch_size=1,
         shuffle=False,
         num_workers=args.workers,
         pin_memory=True)
