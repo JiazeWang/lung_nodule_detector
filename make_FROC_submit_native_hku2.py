@@ -14,7 +14,7 @@ import pandas
 import csv
 import io
 
-save_dir = '/research/dept8/jzwang/code/lung_nodule_detector/training/results/hku_lo_archors_6912/bbox/'
+save_dir = '/research/dept8/jzwang/code/lung_nodule_detector/training/results/test_60_90_120/bbox/'
 submit_file = './hku_submission_6912.csv'
 sid = './preprocess/hku_list_test_6.csv'
 
