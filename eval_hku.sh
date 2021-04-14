@@ -1,5 +1,5 @@
 sid="./preprocess/hku_list_test.csv"
-submit="'./hku_submission_5.csv'"
+submit="'hku_submission_5.csv'"
 
 
 
