@@ -133,6 +133,7 @@ if __name__ == '__main__':
     detect_th  = 0.3
 
     for i in range(len(pbb)):
+        print("i:",i)
         nms_pbb = nms(pbb[i], nms_th)
         world_pbb = convert_worldcoord(i, nms_pbb, filename_dict)
         print (filename_dict[i])
